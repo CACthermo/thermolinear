@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thermolinear | Precision Environmental Rooms & Controls</title>
+  <meta name="description" content="Thermolinear designs and builds controlled environments—engineered for stability, repeatability, and real-world performance.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #1a1a1a;
+      --bg-elevated: #242322;
+      --bg-card: #2a2929;
+      --fg: #f5f5f5;
+      --fg-muted: #b4b1b0;
+      --fg-dim: #807b79;
+      --accent: #fd0100;
+      --accent-hover: #ff1f1e;
+      --accent-glow: rgba(253, 1, 0, 0.25);
+      --secondary: #04b4d0;
+      --secondary-glow: rgba(4, 180, 208, 0.25);
+      --tertiary: #f25218;
+      --border: #3a3938;
+      --border-subtle: #2f2e2d;
+      --radius-sm: 4px;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      --shadow: 0 8px 32px rgba(0,0,0,0.5);
+      --shadow-lg: 0 16px 64px rgba(0,0,0,0.6);
+      --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      --font-display: 'Space Grotesk', sans-serif;
+      --font-body: 'Inter', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg);
+      color: var(--fg);
+      line-height: 1.6;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body.modal-open { overflow: hidden; }
+    a { color: inherit; text-decoration: none; }
+    button { font-family: inherit; cursor: pointer; border: none; background: none; }
+    img { max-width: 100%; height: auto; display: block; }
+    :focus-visible { outline: 2px solid var(--secondary); outline-offset: 3px; }
+
+    /* Scanline Animation */
+    .scanline {
+      position: fixed; top: 0; left: 0; width: 100%; height: 2px;
+      background: linear-gradient(90deg, transparent 0%, var(--secondary) 50%, transparent 100%);
+      opacity: 0.5; z-index: 1000; pointer-events: none;
+      animation: scanMove 8s linear infinite;
+    }
+    @keyframes scanMove { 0% { top: 0%; opacity: 0; } 5% { opacity: 0.6; } 95% { opacity: 0.6; } 100% { top: 100%; opacity: 0; } }
+
+    /* Dynamic Background System */
+    .dynamic-bg-wrapper { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; overflow: hidden; }
+    .dynamic-bg-layer {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      background-size: cover; background-position: center; opacity: 0;
+      transition: opacity 5s ease-in-out; will-change: opacity;
+      filter: grayscale(80%) contrast(1.1) brightness(0.9);
+    }
+    .dynamic-bg-layer.active { opacity: 0.25; }
+
+    /* Header */
+    .header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 1rem 2rem;
+      background: rgba(26, 26, 26, 0.95); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-subtle); transition: var(--transition);
+    }
+    .header.scrolled { padding: 0.75rem 2rem; background: rgba(26, 26, 26, 0.98); }
+    .header-inner { max-width: 1400px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 2rem; }
+    .logo { display: flex; align-items: center; gap: 0.75rem; font-family: var(--font-display); font-size: 1.5rem; font-weight: 700; letter-spacing: -0.02em; color: var(--fg); }
+    .logo-img-container { height: 65px; width: auto; background: #fff; border-radius: 50%; padding: 4px; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 20px rgba(253, 1, 0, 0.5); transition: transform 0.3s ease; }
+    .logo-img-container:hover { transform: scale(1.05); }
+    .logo-img-container img { height: 100%; width: auto; }
+    .nav { display: flex; align-items: center; gap: 2rem; }
+    .nav-links { display: flex; gap: 0.25rem; }
+    .nav-link { padding: 0.5rem 1rem; font-size: 0.9rem; font-weight: 500; color: var(--fg-muted); border-radius: var(--radius-sm); transition: var(--transition); }
+    .nav-link:hover, .nav-link:focus { color: var(--fg); background: rgba(255, 255, 255, 0.05); }
+    .nav-actions { display: flex; align-items: center; gap: 0.75rem; }
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.65rem 1.25rem; font-size: 0.875rem; font-weight: 600; border-radius: var(--radius-sm); transition: var(--transition); white-space: nowrap; letter-spacing: 0.01em; }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-primary:hover { background: var(--accent-hover); box-shadow: 0 0 30px var(--accent-glow); }
+    .btn-secondary { background: rgba(255, 255, 255, 0.05); color: var(--fg); border: 1px solid var(--border); }
+    .btn-secondary:hover { background: rgba(255, 255, 255, 0.1); border-color: var(--fg-dim); }
+    .btn-ghost { color: var(--fg-muted); }
+    .btn-ghost:hover { color: var(--fg); }
+    .mobile-menu-btn { display: none; padding: 0.5rem; color: var(--fg); }
+
+    /* Hero */
+    .hero { position: relative; min-height: 100vh; display: flex; align-items: center; padding: 8rem 2rem 4rem; overflow: hidden; }
+    .hero::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(26,26,26,0.3) 0%, rgba(26,26,26,0.85) 100%); z-index: 1; pointer-events: none; }
+    .hero-grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(4, 180, 208, 0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(4, 180, 208, 0.08) 1px, transparent 1px); background-size: 80px 80px; mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%); z-index: 2; pointer-events: none; }
+    .hero-glow { position: absolute; width: 600px; height: 600px; border-radius: 50%; filter: blur(120px); opacity: 0.25; pointer-events: none; z-index: 2; }
+    .hero-glow-1 { top: -100px; right: -100px; background: var(--accent); }
+    .hero-content { position: relative; z-index: 3; max-width: 1400px; margin: 0 auto; width: 100%; }
+    .hero-badge { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: rgba(36, 35, 34, 0.8); border: 1px solid var(--border); border-radius: 100px; font-size: 0.8rem; font-weight: 500; color: var(--fg-muted); margin-bottom: 1.5rem; animation: fadeSlideUp 0.8s ease-out; }
+    .hero-badge-dot { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; animation: pulse 2s ease-in-out infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.6; transform: scale(1.2); } }
+    .hero-title { font-family: var(--font-display); font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 700; line-height: 1.05; letter-spacing: -0.03em; margin-bottom: 1.5rem; animation: fadeSlideUp 0.8s ease-out 0.1s both; }
+    .hero-title-accent { color: var(--accent); }
+    .hero-subtitle { font-size: clamp(1rem, 2vw, 1.25rem); color: var(--fg-muted); max-width: 580px; margin-bottom: 2.5rem; line-height: 1.7; animation: fadeSlideUp 0.8s ease-out 0.2s both; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 1rem; animation: fadeSlideUp 0.8s ease-out 0.3s both; }
+    .hero-actions .btn { padding: 0.9rem 1.75rem; font-size: 0.95rem; }
+    .hero-stats { display: flex; gap: 4rem; margin-top: 5rem; padding-top: 2.5rem; border-top: 1px solid var(--border-subtle); animation: fadeSlideUp 0.8s ease-out 0.4s both; }
+    .hero-stat { text-align: left; }
+    .hero-stat-value { font-family: var(--font-display); font-size: 2.5rem; font-weight: 700; color: var(--fg); line-height: 1; }
+    .hero-stat-label { font-size: 0.85rem; color: var(--fg-dim); margin-top: 0.25rem; }
+    @keyframes fadeSlideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* Credibility Strip */
+    .cred-strip { background: var(--bg-elevated); border-top: 1px solid var(--border-subtle); border-bottom: 1px solid var(--border-subtle); padding: 1rem 2rem; overflow: hidden; position: relative; z-index: 10; }
+    .cred-inner { max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 2rem; flex-wrap: wrap; }
+    .cred-item { display: flex; align-items: center; gap: 0.75rem; font-size: 0.85rem; font-weight: 500; color: var(--fg-muted); }
+    .cred-icon { width: 18px; height: 18px; color: var(--accent); }
+
+    /* Section Base */
+    .section { padding: 6rem 2rem; position: relative; }
+    .section-inner { max-width: 1400px; margin: 0 auto; position: relative; z-index: 2; }
+    .section-header { text-align: center; margin-bottom: 4rem; }
+    .section-label { display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 1rem; }
+    .section-title { font-family: var(--font-display); font-size: clamp(2rem, 4vw, 3rem); font-weight: 700; letter-spacing: -0.02em; margin-bottom: 1rem; }
+    .section-desc { font-size: 1.1rem; color: var(--fg-muted); max-width: 600px; margin: 0 auto; }
+
+    /* Solutions */
+    .solutions-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; }
+    .solution-card { background: rgba(36, 35, 34, 0.6); backdrop-filter: blur(10px); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 2rem; transition: var(--transition); position: relative; overflow: hidden; }
+    .solution-card::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--accent); opacity: 0; transition: var(--transition); }
+    .solution-card:hover { border-color: var(--border); transform: translateY(-4px); box-shadow: var(--shadow); background: rgba(42, 41, 41, 0.8); }
+    .solution-card:hover::before { opacity: 1; }
+    .solution-icon { width: 48px; height: 48px; background: rgba(253, 1, 0, 0.1); border: 1px solid rgba(253, 1, 0, 0.3); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem; }
+    .solution-icon svg { width: 24px; height: 24px; color: var(--accent); }
+    .solution-title { font-family: var(--font-display); font-size: 1.35rem; font-weight: 600; margin-bottom: 0.75rem; }
+    .solution-desc { color: var(--fg-muted); margin-bottom: 1.5rem; line-height: 1.7; }
+    .solution-btn { display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; font-weight: 600; color: var(--secondary); transition: var(--transition); }
+    .solution-btn:hover { color: var(--tertiary); gap: 0.75rem; }
+
+    /* Accordion */
+    .solutions-accordion { margin-top: 3rem; background: rgba(36, 35, 34, 0.6); backdrop-filter: blur(10px); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); overflow: hidden; position: relative; z-index: 2; }
+    .accordion-item { border-bottom: 1px solid var(--border-subtle); }
+    .accordion-item:last-child { border-bottom: none; }
+    .accordion-header { width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 1.5rem; font-size: 1rem; font-weight: 600; color: var(--fg); text-align: left; transition: var(--transition); }
+    .accordion-header:hover { background: rgba(255, 255, 255, 0.05); }
+    .accordion-icon { width: 20px; height: 20px; color: var(--fg-muted); transition: var(--transition); }
+    .accordion-item.active .accordion-icon { transform: rotate(180deg); }
+    .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out; }
+    .accordion-content-inner { padding: 0 1.5rem 1.5rem; color: var(--fg-muted); line-height: 1.7; }
+
+    /* Process */
+    .process-section { background: var(--bg-elevated); }
+    .process-timeline { display: flex; justify-content: space-between; position: relative; }
+    .process-timeline::before { content: ''; position: absolute; top: 24px; left: 40px; right: 40px; height: 2px; background: var(--border); z-index: 0; }
+    .process-step { flex: 1; text-align: center; position: relative; padding: 0 0.5rem; z-index: 1; }
+    .process-marker { width: 48px; height: 48px; background: var(--bg-card); border: 2px solid var(--border); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; position: relative; z-index: 1; transition: var(--transition); }
+    .process-step:hover .process-marker { border-color: var(--secondary); background: var(--secondary-glow); }
+    .process-number { font-family: var(--font-display); font-size: 1.1rem; font-weight: 700; color: var(--secondary); }
+    .process-title { font-family: var(--font-display); font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem; }
+    .process-desc { font-size: 0.85rem; color: var(--fg-dim); line-height: 1.5; }
+
+    /* Projects Section (Simplified) */
+    .projects-section { padding-bottom: 8rem; }
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 1.5rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Project Cards */
+    .project-card { background: rgba(36, 35, 34, 0.6); backdrop-filter: blur(10px); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); overflow: hidden; transition: var(--transition); cursor: pointer; }
+    .project-card:hover { border-color: var(--secondary); transform: translateY(-4px); box-shadow: var(--shadow); background: rgba(42, 41, 41, 0.8); }
+    .project-card-image { position: relative; height: 200px; overflow: hidden; background: var(--bg); }
+    .project-card-image img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(30%); transition: transform 0.5s ease, filter 0.5s ease; }
+    .project-card:hover .project-card-image img { transform: scale(1.05); filter: grayscale(0%); }
+    .project-card-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(26,26,26,0.9) 0%, transparent 60%); }
+    .project-card-featured { position: absolute; top: 1rem; left: 1rem; padding: 0.35rem 0.75rem; background: var(--accent); border-radius: var(--radius-sm); font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #fff; }
+    .project-card-year { position: absolute; top: 1rem; right: 1rem; padding: 0.35rem 0.75rem; background: rgba(26, 26, 26, 0.8); backdrop-filter: blur(8px); border-radius: var(--radius-sm); font-size: 0.75rem; font-weight: 500; color: var(--fg-muted); }
+    .project-card-content { padding: 1.5rem; }
+    .project-card-title { font-family: var(--font-display); font-size: 1.15rem; font-weight: 600; margin-bottom: 0.5rem; }
+    .project-card-summary { font-size: 0.9rem; color: var(--fg-muted); line-height: 1.6; margin-bottom: 1rem; }
+    .project-card-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .project-tag { padding: 0.25rem 0.6rem; background: var(--bg); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); font-size: 0.7rem; font-weight: 500; color: var(--fg-dim); }
+
+    /* Modal */
+    .modal-overlay { position: fixed; inset: 0; z-index: 200; display: flex; align-items: center; justify-content: center; padding: 2rem; opacity: 0; visibility: hidden; transition: var(--transition); }
+    .modal-overlay.active { opacity: 1; visibility: visible; }
+    .modal-backdrop { position: absolute; inset: 0; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(10px); }
+    .modal { position: relative; width: 100%; max-width: 900px; max-height: 90vh; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; transform: scale(0.95) translateY(20px); transition: var(--transition); }
+    .modal-overlay.active .modal { transform: scale(1) translateY(0); }
+    .modal-header { display: flex; align-items: flex-start; justify-content: space-between; padding: 1.5rem 2rem; border-bottom: 1px solid var(--border-subtle); }
+    .modal-title { font-family: var(--font-display); font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .modal-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .modal-close { position: absolute; top: 1rem; right: 1rem; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background: var(--bg); border-radius: var(--radius-sm); color: var(--fg-muted); transition: var(--transition); }
+    .modal-close:hover { background: var(--accent); color: #fff; }
+    .modal-body { max-height: calc(90vh - 100px); overflow-y: auto; padding: 2rem; }
+    .modal-section { margin-bottom: 2rem; }
+    .modal-section:last-child { margin-bottom: 0; }
+    .modal-section-title { font-family: var(--font-display); font-size: 1rem; font-weight: 600; margin-bottom: 1rem; color: var(--secondary); text-transform: uppercase; letter-spacing: 0.05em; }
+    .modal-summary { font-size: 1rem; color: var(--fg-muted); line-height: 1.7; }
+    .modal-list { display: flex; flex-direction: column; gap: 0.75rem; }
+    .modal-list-item { display: flex; align-items: flex-start; gap: 0.75rem; font-size: 0.95rem; color: var(--fg-muted); }
+    .modal-list-icon { flex-shrink: 0; width: 20px; height: 20px; margin-top: 2px; }
+    .modal-snapshot { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1rem; background: var(--bg); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 1.5rem; }
+    .snapshot-item { display: flex; flex-direction: column; gap: 0.25rem; }
+    .snapshot-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--fg-dim); }
+    .snapshot-value { font-size: 0.95rem; font-weight: 500; color: var(--fg); }
+    .modal-gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+    .modal-gallery-item { position: relative; aspect-ratio: 4/3; border-radius: var(--radius-md); overflow: hidden; border: 1px solid var(--border-subtle); }
+    .modal-gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; }
+    .modal-gallery-item:hover img { transform: scale(1.05); }
+    .modal-cta { padding-top: 1.5rem; border-top: 1px solid var(--border-subtle); }
+
+    /* About */
+    .about-section { background: var(--bg-elevated); }
+    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+    .about-content h3 { font-family: var(--font-display); font-size: 1.75rem; font-weight: 700; margin-bottom: 1.5rem; }
+    .about-mission { font-size: 1rem; color: var(--fg-muted); line-height: 1.8; margin-bottom: 1.5rem; }
+    .about-mission + .about-mission { margin-bottom: 2rem; }
+    .about-different-title { font-family: var(--font-display); font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem; }
+    .about-list { display: flex; flex-direction: column; gap: 0.75rem; }
+    .about-list-item { display: flex; align-items: flex-start; gap: 0.75rem; font-size: 0.95rem; color: var(--fg-muted); }
+    .about-list-icon { flex-shrink: 0; width: 20px; height: 20px; color: var(--accent); margin-top: 2px; }
+    .about-image { position: relative; border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--border-subtle); z-index: 2; }
+    .about-image img { width: 100%; height: 400px; object-fit: cover; filter: grayscale(20%); }
+
+    /* Contact */
+    .contact-section { position: relative; overflow: hidden; }
+    .contact-bg { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 0%, rgba(253, 1, 0, 0.15) 0%, transparent 60%); z-index: 1; pointer-events: none; }
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; position: relative; z-index: 2; }
+    .contact-content h2 { font-family: var(--font-display); font-size: clamp(2rem, 4vw, 2.5rem); font-weight: 700; margin-bottom: 1rem; }
+    .contact-content p { font-size: 1.1rem; color: var(--fg-muted); margin-bottom: 2rem; }
+    .contact-buttons { display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 3rem; }
+    .contact-buttons .btn { padding: 1rem 2rem; font-size: 1rem; }
+    .contact-info { display: flex; flex-direction: column; gap: 1.5rem; }
+    .contact-item { display: flex; align-items: flex-start; gap: 1rem; }
+    .contact-icon { width: 24px; height: 24px; color: var(--secondary); flex-shrink: 0; margin-top: 2px; }
+    .contact-item-text { font-size: 0.95rem; color: var(--fg-muted); line-height: 1.6; }
+    .contact-item-text strong { display: block; font-weight: 600; color: var(--fg); margin-bottom: 0.25rem; }
+    .contact-visual { position: relative; z-index: 2; }
+    .contact-visual-card { background: rgba(36, 35, 34, 0.6); backdrop-filter: blur(10px); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 2rem; }
+    .contact-visual-title { font-family: var(--font-display); font-size: 1.25rem; font-weight: 600; margin-bottom: 1.5rem; }
+    .contact-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+    .contact-stat { text-align: center; padding: 1.5rem; background: var(--bg); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); }
+    .contact-stat-value { font-family: var(--font-display); font-size: 2rem; font-weight: 700; color: var(--secondary); line-height: 1; margin-bottom: 0.5rem; }
+    .contact-stat-label { font-size: 0.85rem; color: var(--fg-dim); }
+
+    /* Footer */
+    .footer { background: var(--bg-elevated); border-top: 1px solid var(--border-subtle); padding: 3rem 2rem 2rem; position: relative; z-index: 10; }
+    .footer-inner { max-width: 1400px; margin: 0 auto; }
+    .footer-main { display: flex; justify-content: space-between; align-items: flex-start; gap: 2rem; flex-wrap: wrap; padding-bottom: 2rem; border-bottom: 1px solid var(--border-subtle); margin-bottom: 2rem; }
+    .footer-brand { max-width: 300px; }
+    .footer-logo { font-family: var(--font-display); font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem; }
+    .footer-tagline { font-size: 0.9rem; color: var(--fg-muted); }
+    .footer-links { display: flex; gap: 3rem; }
+    .footer-col-title { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--fg); margin-bottom: 1rem; }
+    .footer-col ul { display: flex; flex-direction: column; gap: 0.5rem; }
+    .footer-col a { font-size: 0.9rem; color: var(--fg-muted); transition: var(--transition); }
+    .footer-col a:hover { color: var(--accent); }
+    .footer-bottom { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+    .footer-copy { font-size: 0.85rem; color: var(--fg-dim); }
+    .footer-legal { display: flex; gap: 1.5rem; }
+    .footer-legal a { font-size: 0.85rem; color: var(--fg-dim); transition: var(--transition); }
+    .footer-legal a:hover { color: var(--fg); }
+
+    .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s ease, transform 0.8s ease; }
+    .reveal.revealed { opacity: 1; transform: translateY(0); }
+
+    /* Responsive */
+    @media (max-width: 1024px) { .about-grid { grid-template-columns: 1fr; gap: 3rem; } .about-image { order: -1; } .contact-grid { grid-template-columns: 1fr; gap: 3rem; } }
+    @media (max-width: 768px) {
+      .header { padding: 1rem; } .nav-links, .nav-actions { display: none; } .mobile-menu-btn { display: flex; }
+      .hero { padding: 6rem 1.5rem 3rem; } .hero-stats { flex-direction: column; gap: 1.5rem; }
+      .section { padding: 4rem 1.5rem; }
+      .process-timeline { flex-direction: column; gap: 2rem; } .process-timeline::before { display: none; }
+      .process-step { display: flex; align-items: flex-start; text-align: left; gap: 1rem; padding: 0; } .process-marker { margin: 0; flex-shrink: 0; }
+      .modal { margin: 1rem; max-height: 95vh; } .modal-body { padding: 1.5rem; } .modal-gallery { grid-template-columns: repeat(2, 1fr); }
+      .footer-main { flex-direction: column; gap: 2rem; } .footer-links { flex-direction: column; gap: 2rem; } .footer-bottom { flex-direction: column; text-align: center; }
+      .logo-img-container { height: 50px; }
+    }
+    @media (max-width: 480px) { .hero-title { font-size: 2rem; } .projects-grid { grid-template-columns: 1fr; } .modal-gallery { grid-template-columns: 1fr; } }
+
+    /* Mobile Menu */
+    .mobile-menu { position: fixed; top: 0; right: 0; bottom: 0; width: 280px; background: var(--bg-elevated); border-left: 1px solid var(--border); z-index: 300; padding: 1.5rem; transform: translateX(100%); transition: var(--transition); }
+    .mobile-menu.active { transform: translateX(0); }
+    .mobile-menu-header { display: flex; justify-content: flex-end; margin-bottom: 2rem; }
+    .mobile-menu-close { padding: 0.5rem; color: var(--fg-muted); }
+    .mobile-menu-links { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 2rem; }
+    .mobile-menu-link { padding: 0.75rem 1rem; font-size: 1rem; font-weight: 500; color: var(--fg-muted); border-radius: var(--radius-sm); transition: var(--transition); }
+    .mobile-menu-link:hover { background: rgba(255, 255, 255, 0.05); color: var(--fg); }
+    .mobile-menu-actions { display: flex; flex-direction: column; gap: 0.75rem; }
+    .mobile-menu-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 250; opacity: 0; visibility: hidden; transition: var(--transition); }
+    .mobile-menu-overlay.active { opacity: 1; visibility: visible; }
+  </style>
+</head>
+<body>
+  <div class="scanline"></div>
+
+  <!-- Header -->
+  <header class="header" id="header">
+    <div class="header-inner">
+      <a href="#home" class="logo" aria-label="Thermolinear Home">
+        <div class="logo-img-container">
+           <img src="https://i.imgur.com/T8tIGoy.png" alt="Thermolinear Logo">
+        </div>
+      </a>
+      
+      <nav class="nav" role="navigation" aria-label="Main navigation">
+        <div class="nav-links">
+          <a href="#home" class="nav-link">Home</a>
+          <a href="#solutions" class="nav-link">Solutions</a>
+          <a href="#projects" class="nav-link">Projects</a>
+          <a href="#about" class="nav-link">About</a>
+          <a href="#contact" class="nav-link">Contact</a>
+        </div>
+      </nav>
+
+      <div class="nav-actions">
+        <a class="btn btn-ghost email-link">Email</a>
+        <a href="#contact" class="btn btn-primary">Request a Quote</a>
+      </div>
+
+      <button class="mobile-menu-btn" aria-label="Open menu" aria-expanded="false" id="mobileMenuBtn">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <line x1="3" y1="12" x2="21" y2="12"/>
+          <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
+  <nav class="mobile-menu" id="mobileMenu" aria-label="Mobile navigation">
+    <div class="mobile-menu-header">
+      <button class="mobile-menu-close" aria-label="Close menu" id="mobileMenuClose">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <line x1="18" y1="6" x2="6" y2="18"/>
+          <line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+    <div class="mobile-menu-links">
+      <a href="#home" class="mobile-menu-link">Home</a>
+      <a href="#solutions" class="mobile-menu-link">Solutions</a>
+      <a href="#projects" class="mobile-menu-link">Projects</a>
+      <a href="#about" class="mobile-menu-link">About</a>
+      <a href="#contact" class="mobile-menu-link">Contact</a>
+    </div>
+    <div class="mobile-menu-actions">
+      <a href="#contact" class="btn btn-primary">Request a Quote</a>
+      <a class="btn btn-secondary email-link">Email Us</a>
+    </div>
+  </nav>
+
+  <main>
+    <!-- Hero -->
+    <section id="home" class="hero">
+      <div class="dynamic-bg-wrapper">
+        <div class="dynamic-bg-layer active"></div>
+        <div class="dynamic-bg-layer"></div>
+      </div>
+      
+      <div class="hero-grid"></div>
+      <div class="hero-glow hero-glow-1"></div>
+      
+      <div class="hero-content">
+        <div class="hero-badge">
+          <span class="hero-badge-dot"></span>
+          <span>Setting Industry Standards for 40 Years</span>
+        </div>
+        <h1 class="hero-title">
+          Precision <span class="hero-title-accent">Environmental</span> Rooms & Controls
+        </h1>
+        <p class="hero-subtitle">
+          We design and build controlled environments—engineered for stability, repeatability, and real-world performance.
+        </p>
+        <div class="hero-actions">
+          <a href="#projects" class="btn btn-primary">Explore Projects</a>
+          <a class="btn btn-secondary email-link">Email Us</a>
+        </div>
+        <div class="hero-stats">
+          <div class="hero-stat">
+            <div class="hero-stat-value">40+</div>
+            <div class="hero-stat-label">Years of Experience</div>
+          </div>
+          <div class="hero-stat">
+            <div class="hero-stat-value">500+</div>
+            <div class="hero-stat-label">Projects Delivered</div>
+          </div>
+          <div class="hero-stat">
+            <div class="hero-stat-value">100%</div>
+            <div class="hero-stat-label">Engineering-First</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Credibility Strip -->
+    <section class="cred-strip">
+      <div class="cred-inner">
+        <div class="cred-item">
+          <svg class="cred-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <span>Setting Industry Standards for 40 Years</span>
+        </div>
+        <div class="cred-item">
+          <svg class="cred-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          <span>Engineering-first approach</span>
+        </div>
+        <div class="cred-item">
+          <svg class="cred-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          <span>Integrated controls + conditioning</span>
+        </div>
+        <div class="cred-item">
+          <svg class="cred-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <span>Cincinnati, OH</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Solutions -->
+    <section id="solutions" class="section">
+      <div class="dynamic-bg-wrapper"><div class="dynamic-bg-layer active"></div><div class="dynamic-bg-layer"></div></div>
+      <div class="section-inner">
+        <div class="section-header reveal">
+          <span class="section-label">Solutions</span>
+          <h2 class="section-title">What We Build</h2>
+          <p class="section-desc">Purpose-engineered systems for precise environmental control across industries.</p>
+        </div>
+
+        <div class="solutions-grid">
+          <article class="solution-card reveal">
+            <div class="solution-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+            <h3 class="solution-title">Environmental Rooms</h3>
+            <p class="solution-desc">Custom controlled spaces for testing, storage, and process stability.</p>
+            <button class="solution-btn" data-accordion="rooms" aria-expanded="false">Learn more<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><line x1="12" y1="5" x2="12" y2="19"/></svg></button>
+          </article>
+
+          <article class="solution-card reveal">
+            <div class="solution-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg></div>
+            <h3 class="solution-title">Custom Controls</h3>
+            <p class="solution-desc">Purpose-built control systems that maintain tight tolerances and clear visibility.</p>
+            <button class="solution-btn" data-accordion="controls" aria-expanded="false">Learn more<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><line x1="12" y1="5" x2="12" y2="19"/></svg></button>
+          </article>
+
+          <article class="solution-card reveal">
+            <div class="solution-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"/></svg></div>
+            <h3 class="solution-title">Conditioning Systems</h3>
+            <p class="solution-desc">Engineered conditioning solutions integrated for reliability and performance.</p>
+            <button class="solution-btn" data-accordion="conditioning" aria-expanded="false">Learn more<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><line x1="12" y1="5" x2="12" y2="19"/></svg></button>
+          </article>
+        </div>
+
+        <div class="solutions-accordion reveal">
+          <div class="accordion-item" id="accordion-rooms">
+            <button class="accordion-header" aria-expanded="false">Environmental Rooms Details<svg class="accordion-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+            <div class="accordion-content"><div class="accordion-content-inner"><p>Our environmental rooms are engineered for precision applications where temperature, humidity, and air quality must remain within exact tolerances. From pharmaceutical stability chambers to industrial process rooms, each system is designed around your specific requirements.</p><ul style="margin-top: 1rem; padding-left: 1.25rem; list-style: disc;"><li>Temperature precision to +/- 0.5°C or better</li><li>Humidity control from 10% to 95% RH</li><li>Walk-in and reach-in configurations</li><li>Full validation and commissioning support</li></ul></div></div>
+          </div>
+          <div class="accordion-item" id="accordion-controls">
+            <button class="accordion-header" aria-expanded="false">Custom Controls Details<svg class="accordion-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+            <div class="accordion-content"><div class="accordion-content-inner"><p>Our control systems integrate seamlessly with environmental and conditioning equipment, providing operators with clear visibility and precise command over every parameter. Built for reliability and serviceability, our controls are designed to evolve with your needs.</p><ul style="margin-top: 1rem; padding-left: 1.25rem; list-style: disc;"><li>PLC-based and DDC control architectures</li><li>Remote monitoring and alarm capabilities</li><li>Historical data logging and reporting</li><li>Integration with building management systems</li></ul></div></div>
+          </div>
+          <div class="accordion-item" id="accordion-conditioning">
+            <button class="accordion-header" aria-expanded="false">Conditioning Systems Details<svg class="accordion-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+            <div class="accordion-content"><div class="accordion-content-inner"><p>Our conditioning systems deliver the heating, cooling, and humidity management that environmental rooms require. Engineered as integrated solutions rather than off-the-shelf components, these systems are sized and configured for your specific application.</p><ul style="margin-top: 1rem; padding-left: 1.25rem; list-style: disc;"><li>Chilled water, DX, and glycol cooling options</li><li>Electric, hot water, and steam heating</li><li>Steam generation and ultrasonic humidification</li><li>Service-friendly design with accessible components</li></ul></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Process -->
+    <section class="section process-section">
+      <div class="dynamic-bg-wrapper"><div class="dynamic-bg-layer active"></div><div class="dynamic-bg-layer"></div></div>
+      <div class="section-inner">
+        <div class="section-header reveal">
+          <span class="section-label">Process</span>
+          <h2 class="section-title">How We Work</h2>
+          <p class="section-desc">A structured approach from discovery to long-term support.</p>
+        </div>
+
+        <div class="process-timeline reveal">
+          <div class="process-step"><div class="process-marker"><span class="process-number">1</span></div><div><h3 class="process-title">Discover</h3><p class="process-desc">We learn your requirements, constraints, and performance goals.</p></div></div>
+          <div class="process-step"><div class="process-marker"><span class="process-number">2</span></div><div><h3 class="process-title">Engineer</h3><p class="process-desc">Our team designs a solution tailored to your exact specifications.</p></div></div>
+          <div class="process-step"><div class="process-marker"><span class="process-number">3</span></div><div><h3 class="process-title">Build</h3><p class="process-desc">We fabricate and assemble with quality at every step.</p></div></div>
+          <div class="process-step"><div class="process-marker"><span class="process-number">4</span></div><div><h3 class="process-title">Install</h3><p class="process-desc">Professional on-site installation with minimal disruption.</p></div></div>
+          <div class="process-step"><div class="process-marker"><span class="process-number">5</span></div><div><h3 class="process-title">Commission</h3><p class="process-desc">Full testing, calibration, and documentation for compliance.</p></div></div>
+          <div class="process-step"><div class="process-marker"><span class="process-number">6</span></div><div><h3 class="process-title">Support</h3><p class="process-desc">Ongoing service, parts, and technical assistance.</p></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Projects -->
+    <section id="projects" class="section projects-section">
+      <div class="dynamic-bg-wrapper"><div class="dynamic-bg-layer active"></div><div class="dynamic-bg-layer"></div></div>
+      <div class="section-inner">
+        <div class="section-header reveal">
+          <span class="section-label">Projects</span>
+          <h2 class="section-title">Our Work</h2>
+          <p class="section-desc">A selection of precision environmental projects delivered across industries.</p>
+        </div>
+        <div class="projects-grid reveal" id="projectsGrid"></div>
+      </div>
+    </section>
+
+    <!-- About -->
+    <section id="about" class="section about-section">
+      <div class="dynamic-bg-wrapper"><div class="dynamic-bg-layer active"></div><div class="dynamic-bg-layer"></div></div>
+      <div class="section-inner">
+        <div class="about-grid">
+          <div class="about-content reveal">
+            <span class="section-label">About</span>
+            <h2 class="section-title" style="text-align: left;">About Thermolinear</h2>
+            <p class="about-mission">Thermolinear will design, manufacture and market value oriented products of the highest quality, with a commitment to total customer satisfaction. Our success relies upon the contribution of all associates.</p>
+            <p class="about-mission">We are dedicated to maintaining an environment that encourages and rewards productivity, creativity and team work. Thermolinear and each of its associates will strive for excellence in everything we do through continual improvement, job education and empowerment.</p>
+            <h3 class="about-different-title">What makes us different</h3>
+            <ul class="about-list">
+              <li class="about-list-item"><svg class="about-list-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg><span>Stability-focused engineering (not comfort HVAC)</span></li>
+              <li class="about-list-item"><svg class="about-list-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg><span>Integrated mechanical + controls thinking</span></li>
+              <li class="about-list-item"><svg class="about-list-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg><span>Built for serviceability and long life</span></li>
+              <li class="about-list-item"><svg class="about-list-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg><span>Commissioning-minded delivery</span></li>
+            </ul>
+          </div>
+          <div class="about-image reveal"><img src="https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=800&q=80" alt="Engineering workspace" loading="lazy"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact" class="section contact-section">
+      <div class="dynamic-bg-wrapper"><div class="dynamic-bg-layer active"></div><div class="dynamic-bg-layer"></div></div>
+      <div class="contact-bg"></div>
+      <div class="section-inner">
+        <div class="contact-grid">
+          <div class="contact-content reveal">
+            <h2>Send us your specs</h2>
+            <p>Ready to start your project? Reach out to discuss your environmental room or control system requirements.</p>
+            <div class="contact-buttons">
+              <a class="btn btn-primary email-link" id="contact-email-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>Email Us</a>
+              <a href="tel:+18005875067" class="btn btn-secondary"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>Call (800) 587-5067</a>
+            </div>
+            <div class="contact-info">
+              <div class="contact-item"><svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><div class="contact-item-text"><strong>Address</strong>2080 Northwest Dr., Cincinnati, OH 45231</div></div>
+              <div class="contact-item"><svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg><div class="contact-item-text"><strong>Phone</strong>(800) 587-5067</div></div>
+              <div class="contact-item"><svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg><div class="contact-item-text"><strong>Email</strong><span id="contact-email-text"></span></div></div>
+            </div>
+          </div>
+          <div class="contact-visual reveal">
+            <div class="contact-visual-card">
+              <h3 class="contact-visual-title">Why Work With Us</h3>
+              <div class="contact-stats">
+                <div class="contact-stat"><div class="contact-stat-value">40+</div><div class="contact-stat-label">Years Experience</div></div>
+                <div class="contact-stat"><div class="contact-stat-value">500+</div><div class="contact-stat-label">Projects Completed</div></div>
+                <div class="contact-stat"><div class="contact-stat-value">24/7</div><div class="contact-stat-label">Support Available</div></div>
+                <div class="contact-stat"><div class="contact-stat-value">100%</div><div class="contact-stat-label">Custom Engineered</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-main">
+        <div class="footer-brand">
+          <div class="footer-logo">Thermolinear</div>
+          <p class="footer-tagline">Setting Industry Standards for 40 Years</p>
+        </div>
+        <div class="footer-links">
+          <div class="footer-col">
+            <h4 class="footer-col-title">Navigation</h4>
+            <ul><li><a href="#home">Home</a></li><li><a href="#solutions">Solutions</a></li><li><a href="#projects">Projects</a></li><li><a href="#about">About</a></li><li><a href="#contact">Contact</a></li></ul>
+          </div>
+          <div class="footer-col">
+            <h4 class="footer-col-title">Contact</h4>
+            <ul>
+              <li><a class="email-link" id="footer-email-link"></a></li>
+              <li><a href="tel:+18005875067">(800) 587-5067</a></li>
+              <li><span>2080 Northwest Dr.</span></li>
+              <li><span>Cincinnati, OH 45231</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p class="footer-copy" id="footerCopy"></p>
+        <div class="footer-legal"><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Accessibility</a></div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Modal -->
+  <div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-backdrop" id="modalBackdrop"></div>
+    <div class="modal">
+      <button class="modal-close" id="modalClose" aria-label="Close modal"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      <div class="modal-header"><div><h2 class="modal-title" id="modalTitle">Project Title</h2><div class="modal-tags" id="modalTags"></div></div></div>
+      <div class="modal-body" id="modalBody"></div>
+    </div>
+  </div>
+
+  <script>
+    const BG_IMAGES = [
+      'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=1920&q=80',
+      'https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=1920&q=80',
+      'https://images.unsplash.com/photo-1565043666747-69f6646db940?w=1920&q=80',
+      'https://images.unsplash.com/photo-1518770660439-4636190af475?w=1920&q=80',
+      'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?w=1920&q=80',
+      'https://images.unsplash.com/photo-1551076805-e1869033e561?w=1920&q=80',
+      'https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=1920&q=80',
+      'https://images.unsplash.com/photo-1581092921461-eab62e97a780?w=1920&q=80',
+      'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1920&q=80'
+    ];
+
+    const PROJECTS = [
+      { id: 1, title: "Confidential Biotech Stability Room", year: 2024, isFeatured: true, industryTags: ["Biotech/Pharma"], projectTypeTags: ["New Build"], systemCategory: "Environmental Room", capabilityTags: ["Stability", "Temperature Control", "Humidity Control"], summary: "A purpose-built stability chamber designed for long-term pharmaceutical storage and testing under tightly controlled conditions.", challengeBullets: ["Required precise temperature uniformity across a large storage volume", "Client needed 21 CFR Part 11 compliant monitoring and data logging", "Limited mechanical space for conditioning equipment"], solutionBullets: ["Custom air handling system with redundant cooling circuits", "Integrated SCADA system with role-based access and audit trails", "Compact conditioning unit mounted on the chamber exterior"], snapshotKV: { "System Category": "Environmental Room", "Delivery Type": "New Build", "Controls": "PLC with SCADA", "Monitoring": "21 CFR Part 11 Compliant", "Commissioning": "Full IQ/OQ/PQ", "Serviceability": "Front-access components", "Location": "Confidential / Northeast" }, images: ["https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?w=600&q=80", "https://images.unsplash.com/photo-1582719471384-894fbb16e074?w=600&q=80", "https://images.unsplash.com/photo-1581093458791-9d42e3c41e2c?w=600&q=80", "https://images.unsplash.com/photo-1576086213369-97a306d36557?w=600&q=80"] },
+      { id: 2, title: "University Research Environmental Room", year: 2023, isFeatured: true, industryTags: ["University/Research"], projectTypeTags: ["New Build"], systemCategory: "Environmental Room", capabilityTags: ["Research", "Flexibility", "Monitoring"], summary: "A versatile environmental chamber for a university research facility, supporting multiple temperature and humidity profiles.", challengeBullets: ["Research protocols required rapid temperature cycling capability", "Multiple user groups with different access and scheduling needs", "Integration with existing building management system"], solutionBullets: ["High-capacity conditioning system for rapid thermal response", "Web-based scheduling and access control interface", "BACnet integration with campus BMS for centralized monitoring"], snapshotKV: { "System Category": "Environmental Room", "Delivery Type": "New Build", "Controls": "DDC with BACnet", "Monitoring": "Web-based interface", "Commissioning": "Performance testing", "Serviceability": "Standard components", "Location": "Midwest University" }, images: ["https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=600&q=80", "https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=600&q=80", "https://images.unsplash.com/photo-1621112943524-d8425af9ff2d?w=600&q=80"] },
+      { id: 3, title: "Manufacturing Controls Retrofit", year: 2023, isFeatured: false, industryTags: ["Manufacturing"], projectTypeTags: ["Retrofit"], systemCategory: "Controls", capabilityTags: ["Retrofit", "Monitoring", "Integration"], summary: "Modernized control systems for legacy environmental chambers in an electronics manufacturing facility.", challengeBullets: ["Existing chambers had obsolete controls with no spare parts", "Production could not tolerate extended downtime", "Historical data migration required for compliance"], solutionBullets: ["Phased retrofit approach with overnight and weekend work", "New PLC controls with backward-compatible I/O wiring", "Data migration from legacy historian to new SQL-based system"], snapshotKV: { "System Category": "Controls", "Delivery Type": "Retrofit", "Controls": "PLC-based", "Monitoring": "SQL historian", "Commissioning": "Startup verification", "Serviceability": "Off-the-shelf components", "Location": "Confidential / Southwest" }, images: ["https://images.unsplash.com/photo-1565043666747-69f6646db940?w=600&q=80", "https://images.unsplash.com/photo-1518770660439-4636190af475?w=600&q=80", "https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=600&q=80"] },
+      { id: 4, title: "Healthcare Storage Environment Upgrade", year: 2022, isFeatured: false, industryTags: ["Healthcare"], projectTypeTags: ["Retrofit"], systemCategory: "Environmental Room", capabilityTags: ["Healthcare", "Temperature Control", "Monitoring"], summary: "Upgraded cold storage environment for a hospital pharmacy, meeting USP 797 requirements.", challengeBullets: ["Strict temperature monitoring and alarm requirements", "Continuous operation required during upgrade", "Limited mechanical room space for equipment"], solutionBullets: ["Redundant refrigeration system with automatic changeover", "Phased installation with temporary cooling provisions", "Wall-mounted condensing units to conserve floor space"], snapshotKV: { "System Category": "Environmental Room", "Delivery Type": "Retrofit", "Controls": "DDC with alarms", "Monitoring": "USP 797 compliant", "Commissioning": "Temperature mapping", "Serviceability": "Redundant systems", "Location": "Regional Hospital / Midwest" }, images: ["https://images.unsplash.com/photo-1516549655169-df83a0774514?w=600&q=80", "https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=600&q=80", "https://images.unsplash.com/photo-1551076805-e1869033e561?w=600&q=80"] },
+      { id: 5, title: "Advanced Materials Conditioning System", year: 2024, isFeatured: true, industryTags: ["Aerospace/Advanced Materials"], projectTypeTags: ["New Build"], systemCategory: "Conditioning", capabilityTags: ["Precision", "Temperature Control", "Integration"], summary: "High-precision conditioning system for composite materials curing and storage in an aerospace application.", challengeBullets: ["Extremely tight temperature tolerance required across large chamber", "Process required specific ramp rates and dwell times", "Clean room compatibility for sensitive materials"], solutionBullets: ["Custom air handling unit with VFD-controlled fans", "Recipe-driven control system for automated process cycles", "HEPA filtration and stainless steel interior surfaces"], snapshotKV: { "System Category": "Conditioning", "Delivery Type": "New Build", "Controls": "Recipe-based PLC", "Monitoring": "Process data logging", "Commissioning": "Full validation", "Serviceability": "Clean room compatible", "Location": "Confidential / West Coast" }, images: ["https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=600&q=80", "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?w=600&q=80", "https://images.unsplash.com/photo-1581092921461-eab62e97a780?w=600&q=80", "https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=600&q=80"] },
+      { id: 6, title: "Pharma Humidity Control Retrofit", year: 2022, isFeatured: false, industryTags: ["Biotech/Pharma"], projectTypeTags: ["Retrofit"], systemCategory: "Conditioning", capabilityTags: ["Humidity Control", "Retrofit", "Stability"], summary: "Added precise humidity control capability to an existing stability chamber for a pharmaceutical company.", challengeBullets: ["Existing chamber lacked humidity control for new product requirements", "GMP validation required for modified system", "Integration with legacy control infrastructure"], solutionBullets: ["Steam humidification system with precision dewpoint control", "Protocol-driven qualification documentation package", "Gateway module for legacy BMS communication"], snapshotKV: { "System Category": "Conditioning", "Delivery Type": "Retrofit", "Controls": "Integrated with legacy", "Monitoring": "Validated data logging", "Commissioning": "IQ/OQ documentation", "Serviceability": "Modular components", "Location": "Confidential / Mid-Atlantic" }, images: ["https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=600&q=80", "https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?w=600&q=80", "https://images.unsplash.com/photo-1576086213369-97a306d36557?w=600&q=80"] },
+      { id: 7, title: "Aerospace Test Environment Build", year: 2023, isFeatured: false, industryTags: ["Aerospace/Advanced Materials"], projectTypeTags: ["New Build"], systemCategory: "Environmental Room", capabilityTags: ["Testing", "Precision", "Temperature Control"], summary: "Environmental test chamber for aerospace component qualification testing.", challengeBullets: ["Wide temperature range from -40C to +85C required", "High airflow uniformity for thermal shock testing", "Seismic restraint requirements for facility location"], solutionBullets: ["Dual-stage refrigeration system for extreme temperature capability", "Perforated floor and ceiling plenums for uniform airflow", "Custom seismic mounting frame with certified restraints"], snapshotKV: { "System Category": "Environmental Room", "Delivery Type": "New Build", "Controls": "PLC with HMI", "Monitoring": "Test data acquisition", "Commissioning": "Temperature uniformity mapping", "Serviceability": "Accessible equipment room", "Location": "Aerospace Facility / West" }, images: ["https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?w=600&q=80", "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=600&q=80", "https://images.unsplash.com/photo-1581092921461-eab62e97a780?w=600&q=80"] },
+      { id: 8, title: "Controls Modernization for Environmental Suite", year: 2021, isFeatured: false, industryTags: ["University/Research"], projectTypeTags: ["Controls Upgrade"], systemCategory: "Controls", capabilityTags: ["Retrofit", "Monitoring", "Integration"], summary: "Comprehensive controls upgrade for a suite of research environmental chambers at a major university.", challengeBullets: ["Multiple chambers with varied ages and control systems", "Researchers needed unified interface across all chambers", "Budget constraints required phased implementation"], solutionBullets: ["Standardized control platform for all chamber types", "Single web-based dashboard for all chambers campus-wide", "Modular implementation to spread costs across fiscal years"], snapshotKV: { "System Category": "Controls", "Delivery Type": "Controls Upgrade", "Controls": "Unified DDC platform", "Monitoring": "Central dashboard", "Commissioning": "Phased verification", "Serviceability": "Standardized parts", "Location": "Major University / Midwest" }, images: ["https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=600&q=80", "https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=600&q=80", "https://images.unsplash.com/photo-1621112943524-d8425af9ff2d?w=600&q=80"] },
+      { id: 9, title: "Process Stability Room Commissioning", year: 2020, isFeatured: false, industryTags: ["Manufacturing"], projectTypeTags: ["New Build"], systemCategory: "Environmental Room", capabilityTags: ["Stability", "Commissioning", "Integration"], summary: "New environmental room for process stability testing in a specialty chemicals manufacturing plant.", challengeBullets: ["Hazardous area classification required for room location", "Specific temperature and humidity profiles for different products", "Integration with plant DCS for production scheduling"], solutionBullets: ["Explosion-proof electrical components and instrumentation", "Recipe-based control system for multiple test profiles", "OPC-UA communication with plant distributed control system"], snapshotKV: { "System Category": "Environmental Room", "Delivery Type": "New Build", "Controls": "PLC with DCS link", "Monitoring": "Plant DCS integrated", "Commissioning": "Full validation", "Serviceability": "Hazardous area rated", "Location": "Chemical Plant / Gulf Coast" }, images: ["https://images.unsplash.com/photo-1565043666747-69f6646db940?w=600&q=80", "https://images.unsplash.com/photo-1518770660439-4636190af475?w=600&q=80", "https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=600&q=80"] },
+      { id: 10, title: "Industrial Conditioning System Integration", year: 2019, isFeatured: false, industryTags: ["Manufacturing"], projectTypeTags: ["New Build"], systemCategory: "Conditioning", capabilityTags: ["Integration", "Temperature Control", "Manufacturing"], summary: "Integrated conditioning system for a precision manufacturing environment requiring strict thermal control.", challengeBullets: ["Large space with varying heat loads from process equipment", "Energy efficiency targets required by corporate policy", "24/7 operation with minimal maintenance windows"], solutionBullets: ["Zoned air handling with demand-based ventilation", "Heat recovery from process exhaust for energy efficiency", "Predictive maintenance monitoring on rotating equipment"], snapshotKV: { "System Category": "Conditioning", "Delivery Type": "New Build", "Controls": "DDC with optimization", "Monitoring": "Predictive maintenance", "Commissioning": "Performance verification", "Serviceability": "Online monitoring", "Location": "Manufacturing Plant / Great Lakes" }, images: ["https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=600&q=80", "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=600&q=80", "https://images.unsplash.com/photo-1518770660439-4636190af475?w=600&q=80", "https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=600&q=80"] }
+    ];
+
+    // --- Email Obfuscation Setup ---
+    const EMAIL_USER = 'JonBell';
+    const EMAIL_DOMAIN = 'cincinnatiair.com';
+    
+    function getEmail() { return EMAIL_USER + '@' + EMAIL_DOMAIN; }
+    
+    function setupEmailLinks() {
+      const email = getEmail();
+      const mailto = 'mailto:' + email;
+      document.querySelectorAll('.email-link').forEach(link => {
+        link.href = mailto;
+        if (link.id === 'footer-email-link' || link.id === 'contact-email-text') { link.textContent = email; }
+      });
+      const contactText = document.getElementById('contact-email-text');
+      if (contactText) contactText.textContent = email;
+    }
+
+    // --- App State ---
+    let projectsGrid = null;
+    let modalOverlay = null;
+    let modalBody = null;
+    let modalTitle = null;
+    let modalTags = null;
+
+    function init() {
+      projectsGrid = document.getElementById('projectsGrid');
+      modalOverlay = document.getElementById('modalOverlay');
+      modalBody = document.getElementById('modalBody');
+      modalTitle = document.getElementById('modalTitle');
+      modalTags = document.getElementById('modalTags');
+
+      setupEmailLinks();
+      initDynamicBackgrounds();
+      renderProjects();
+      setupEventListeners();
+      setupScrollReveal();
+      setupHeader();
+      setupMobileMenu();
+      setupAccordion();
+      updateFooterYear();
+    }
+
+    function initDynamicBackgrounds() {
+      const wrappers = document.querySelectorAll('.dynamic-bg-wrapper');
+      wrappers.forEach((wrapper, index) => {
+        const layers = wrapper.querySelectorAll('.dynamic-bg-layer');
+        if (layers.length < 2) return;
+        const initialImg = BG_IMAGES[index % BG_IMAGES.length];
+        layers[0].style.backgroundImage = `url(${initialImg})`;
+        let currentLayer = 0;
+        setInterval(() => {
+          const nextLayer = (currentLayer + 1) % layers.length;
+          const imgIndex = (Math.floor(Date.now() / 10000) + index) % BG_IMAGES.length;
+          const nextImg = BG_IMAGES[imgIndex];
+          layers[nextLayer].style.backgroundImage = `url(${nextImg})`;
+          layers[nextLayer].classList.add('active');
+          layers[currentLayer].classList.remove('active');
+          currentLayer = nextLayer;
+        }, 8000 + (index * 1000));
+      });
+    }
+
+    // Simplified Render: Just map projects, default sort
+    function renderProjects() {
+      // Sort by Featured then Year
+      const sorted = [...PROJECTS].sort((a, b) => (b.isFeatured ? 1 : 0) - (a.isFeatured ? 1 : 0) || b.year - a.year);
+      if (!projectsGrid) return;
+      projectsGrid.innerHTML = sorted.map(project => {
+        const tags = [...project.industryTags, ...project.capabilityTags.slice(0, 2)];
+        return `<article class="project-card" data-id="${project.id}" tabindex="0" role="button" aria-label="View ${project.title} details"><div class="project-card-image"><img src="${project.images[0]}" alt="${project.title}" loading="lazy"><div class="project-card-overlay"></div>${project.isFeatured ? '<span class="project-card-featured">Featured</span>' : ''}<span class="project-card-year">${project.year}</span></div><div class="project-card-content"><h3 class="project-card-title">${project.title}</h3><p class="project-card-summary">${project.summary}</p><div class="project-card-tags">${tags.map(tag => `<span class="project-tag">${tag}</span>`).join('')}</div></div></article>`;
+      }).join('');
+      projectsGrid.querySelectorAll('.project-card').forEach(card => {
+        card.addEventListener('click', () => openModal(parseInt(card.dataset.id)));
+        card.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openModal(parseInt(card.dataset.id)); } });
+      });
+    }
+
+    function openModal(projectId) {
+      const project = PROJECTS.find(p => p.id === projectId);
+      if (!project || !modalOverlay) return;
+      if (modalTitle) modalTitle.textContent = project.title;
+      if (modalTags) modalTags.innerHTML = [...project.industryTags, ...project.projectTypeTags, ...project.capabilityTags].map(tag => `<span class="project-tag">${tag}</span>`).join('');
+      
+      const email = getEmail();
+      
+      if (modalBody) {
+        modalBody.innerHTML = `<div class="modal-section"><p class="modal-summary">${project.summary}</p></div><div class="modal-section"><h3 class="modal-section-title">Challenge</h3><ul class="modal-list">${project.challengeBullets.map(bullet => `<li class="modal-list-item"><svg class="modal-list-icon" viewBox="0 0 24 24" fill="none" stroke="var(--fg-dim)" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><span>${bullet}</span></li>`).join('')}</ul></div><div class="modal-section"><h3 class="modal-section-title">Solution</h3><ul class="modal-list">${project.solutionBullets.map(bullet => `<li class="modal-list-item"><svg class="modal-list-icon" viewBox="0 0 24 24" fill="none" stroke="var(--secondary)" stroke-width="2.5" stroke-linecap="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><span>${bullet}</span></li>`).join('')}</ul></div><div class="modal-section"><h3 class="modal-section-title">System Snapshot</h3><div class="modal-snapshot">${Object.entries(project.snapshotKV).map(([key, value]) => `<div class="snapshot-item"><span class="snapshot-label">${key}</span><span class="snapshot-value">${value}</span></div>`).join('')}</div></div><div class="modal-section"><h3 class="modal-section-title">Project Gallery</h3><div class="modal-gallery">${project.images.map(img => `<div class="modal-gallery-item"><img src="${img}" alt="Project image" loading="lazy"></div>`).join('')}</div></div><div class="modal-cta"><a href="mailto:${email}?subject=Inquiry%20about%20similar%20project%3A%20${encodeURIComponent(project.title)}" class="btn btn-primary">Email about a similar project</a></div>`;
+      }
+      modalOverlay.classList.add('active');
+      document.body.classList.add('modal-open');
+      document.getElementById('modalClose').focus();
+    }
+
+    function closeModal() { if (!modalOverlay) return; modalOverlay.classList.remove('active'); document.body.classList.remove('modal-open'); }
+
+    function setupEventListeners() {
+      const modalClose = document.getElementById('modalClose'); 
+      const modalBackdrop = document.getElementById('modalBackdrop'); 
+      if (modalClose) modalClose.addEventListener('click', closeModal); 
+      if (modalBackdrop) modalBackdrop.addEventListener('click', closeModal);
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && modalOverlay && modalOverlay.classList.contains('active')) closeModal(); });
+    }
+
+    function setupScrollReveal() { const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('revealed'); }); }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' }); document.querySelectorAll('.reveal').forEach(el => observer.observe(el)); }
+    function setupHeader() { const header = document.getElementById('header'); if (!header) return; window.addEventListener('scroll', () => { if (window.pageYOffset > 100) header.classList.add('scrolled'); else header.classList.remove('scrolled'); }); }
+    function setupMobileMenu() { const menuBtn = document.getElementById('mobileMenuBtn'); const menu = document.getElementById('mobileMenu'); const overlay = document.getElementById('mobileMenuOverlay'); const closeBtn = document.getElementById('mobileMenuClose'); const links = document.querySelectorAll('.mobile-menu-link, .mobile-menu-actions a'); const openMenu = () => { if (menu) menu.classList.add('active'); if (overlay) overlay.classList.add('active'); document.body.style.overflow = 'hidden'; if (menuBtn) menuBtn.setAttribute('aria-expanded', 'true'); }; const closeMenu = () => { if (menu) menu.classList.remove('active'); if (overlay) overlay.classList.remove('active'); document.body.style.overflow = ''; if (menuBtn) menuBtn.setAttribute('aria-expanded', 'false'); }; if (menuBtn) menuBtn.addEventListener('click', openMenu); if (closeBtn) closeBtn.addEventListener('click', closeMenu); if (overlay) overlay.addEventListener('click', closeMenu); links.forEach(link => link.addEventListener('click', closeMenu)); }
+    function setupAccordion() { document.querySelectorAll('.solution-btn').forEach(btn => { btn.addEventListener('click', () => { const accordionId = btn.dataset.accordion; const accordion = document.getElementById(`accordion-${accordionId}`); if (accordion) { const header = accordion.querySelector('.accordion-header'); const content = accordion.querySelector('.accordion-content'); const isActive = accordion.classList.contains('active'); document.querySelectorAll('.accordion-item').forEach(item => { item.classList.remove('active'); const h = item.querySelector('.accordion-header'); const c = item.querySelector('.accordion-content'); if (h) h.setAttribute('aria-expanded', 'false'); if (c) c.style.maxHeight = '0'; }); if (!isActive) { accordion.classList.add('active'); if (header) header.setAttribute('aria-expanded', 'true'); if (content) content.style.maxHeight = content.scrollHeight + 'px'; } setTimeout(() => { accordion.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }, 100); } }); }); document.querySelectorAll('.accordion-header').forEach(header => { header.addEventListener('click', () => { const item = header.parentElement; const content = item.querySelector('.accordion-content'); const isActive = item.classList.contains('active'); document.querySelectorAll('.accordion-item').forEach(i => { i.classList.remove('active'); const h = i.querySelector('.accordion-header'); const c = i.querySelector('.accordion-content'); if (h) h.setAttribute('aria-expanded', 'false'); if (c) c.style.maxHeight = '0'; }); if (!isActive) { item.classList.add('active'); header.setAttribute('aria-expanded', 'true'); if (content) content.style.maxHeight = content.scrollHeight + 'px'; } }); }); }
+    function updateFooterYear() { const footerCopy = document.getElementById('footerCopy'); if (footerCopy) footerCopy.textContent = `© ${new Date().getFullYear()} Thermolinear. All rights reserved.`; }
+
+    document.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>
