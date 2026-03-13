@@ -63,7 +63,6 @@
     img { max-width: 100%; height: auto; display: block; }
     :focus-visible { outline: 2px solid var(--secondary); outline-offset: 3px; }
 
-    /* Scanline Animation */
     .scanline {
       position: fixed; top: 0; left: 0; width: 100%; height: 2px;
       background: linear-gradient(90deg, transparent 0%, var(--secondary) 50%, transparent 100%);
@@ -72,7 +71,6 @@
     }
     @keyframes scanMove { 0% { top: 0%; opacity: 0; } 5% { opacity: 0.6; } 95% { opacity: 0.6; } 100% { top: 100%; opacity: 0; } }
 
-    /* Dynamic Background System */
     .dynamic-bg-wrapper { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; overflow: hidden; }
     .dynamic-bg-layer {
       position: absolute; top: 0; left: 0; width: 100%; height: 100%;
@@ -82,7 +80,6 @@
     }
     .dynamic-bg-layer.active { opacity: 0.25; }
 
-    /* Header */
     .header {
       position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 1rem 2rem;
       background: rgba(26, 26, 26, 0.95); backdrop-filter: blur(12px);
@@ -108,7 +105,6 @@
     .btn-ghost:hover { color: var(--fg); }
     .mobile-menu-btn { display: none; padding: 0.5rem; color: var(--fg); }
 
-    /* Hero */
     .hero { position: relative; min-height: 100vh; display: flex; align-items: center; padding: 8rem 2rem 4rem; overflow: hidden; }
     .hero::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(26,26,26,0.3) 0%, rgba(26,26,26,0.85) 100%); z-index: 1; pointer-events: none; }
     .hero-grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(4, 180, 208, 0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(4, 180, 208, 0.08) 1px, transparent 1px); background-size: 80px 80px; mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%); z-index: 2; pointer-events: none; }
@@ -129,13 +125,11 @@
     .hero-stat-label { font-size: 0.85rem; color: var(--fg-dim); margin-top: 0.25rem; }
     @keyframes fadeSlideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
-    /* Credibility Strip */
     .cred-strip { background: var(--bg-elevated); border-top: 1px solid var(--border-subtle); border-bottom: 1px solid var(--border-subtle); padding: 1rem 2rem; overflow: hidden; position: relative; z-index: 10; }
     .cred-inner { max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 2rem; flex-wrap: wrap; }
     .cred-item { display: flex; align-items: center; gap: 0.75rem; font-size: 0.85rem; font-weight: 500; color: var(--fg-muted); }
     .cred-icon { width: 18px; height: 18px; color: var(--accent); }
 
-    /* Section Base */
     .section { padding: 6rem 2rem; position: relative; }
     .section-inner { max-width: 1400px; margin: 0 auto; position: relative; z-index: 2; }
     .section-header { text-align: center; margin-bottom: 4rem; }
@@ -143,7 +137,6 @@
     .section-title { font-family: var(--font-display); font-size: clamp(2rem, 4vw, 3rem); font-weight: 700; letter-spacing: -0.02em; margin-bottom: 1rem; }
     .section-desc { font-size: 1.1rem; color: var(--fg-muted); max-width: 600px; margin: 0 auto; }
 
-    /* Solutions */
     .solutions-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; }
     .solution-card { background: rgba(36, 35, 34, 0.6); backdrop-filter: blur(10px); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 2rem; transition: var(--transition); position: relative; overflow: hidden; }
     .solution-card::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--accent); opacity: 0; transition: var(--transition); }
@@ -156,7 +149,6 @@
     .solution-btn { display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; font-weight: 600; color: var(--secondary); transition: var(--transition); }
     .solution-btn:hover { color: var(--tertiary); gap: 0.75rem; }
 
-    /* Accordion */
     .solutions-accordion { margin-top: 3rem; background: rgba(36, 35, 34, 0.6); backdrop-filter: blur(10px); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); overflow: hidden; position: relative; z-index: 2; }
     .accordion-item { border-bottom: 1px solid var(--border-subtle); }
     .accordion-item:last-child { border-bottom: none; }
@@ -167,7 +159,6 @@
     .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out; }
     .accordion-content-inner { padding: 0 1.5rem 1.5rem; color: var(--fg-muted); line-height: 1.7; }
 
-    /* Process */
     .process-section { background: var(--bg-elevated); }
     .process-timeline { display: flex; justify-content: space-between; position: relative; }
     .process-timeline::before { content: ''; position: absolute; top: 24px; left: 40px; right: 40px; height: 2px; background: var(--border); z-index: 0; }
@@ -178,39 +169,33 @@
     .process-title { font-family: var(--font-display); font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem; }
     .process-desc { font-size: 0.85rem; color: var(--fg-dim); line-height: 1.5; }
 
-    /* Projects Section */
     .projects-section { padding-bottom: 8rem; }
-    .projects-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-      gap: 1.5rem;
-      position: relative;
-      z-index: 2;
-    }
+    .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 1.5rem; position: relative; z-index: 2; }
 
-    /* Project Cards */
     .project-card { background: rgba(36, 35, 34, 0.6); backdrop-filter: blur(10px); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); overflow: hidden; transition: var(--transition); cursor: pointer; }
     .project-card:hover { border-color: var(--secondary); transform: translateY(-4px); box-shadow: var(--shadow); background: rgba(42, 41, 41, 0.8); }
-    .project-card-image { position: relative; height: 200px; overflow: hidden; background: var(--bg); }
+    .project-card-image { position: relative; height: 220px; overflow: hidden; background: var(--bg); }
     .project-card-image img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(30%); transition: transform 0.5s ease, filter 0.5s ease; }
     .project-card:hover .project-card-image img { transform: scale(1.05); filter: grayscale(0%); }
     .project-card-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(26,26,26,0.9) 0%, transparent 60%); }
     .project-card-featured { position: absolute; top: 1rem; left: 1rem; padding: 0.35rem 0.75rem; background: var(--accent); border-radius: var(--radius-sm); font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #fff; }
-    .project-card-year { position: absolute; top: 1rem; right: 1rem; padding: 0.35rem 0.75rem; background: rgba(26, 26, 26, 0.8); backdrop-filter: blur(8px); border-radius: var(--radius-sm); font-size: 0.75rem; font-weight: 500; color: var(--fg-muted); }
+    .project-card-gallery-badge {
+      position: absolute; top: 1rem; right: 1rem; width: 32px; height: 32px; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; pointer-events: none; border: 1px solid rgba(255,255,255,0.2);
+    }
+    .project-card-gallery-badge svg { width: 16px; height: 16px; }
     .project-card-content { padding: 1.5rem; }
-    .project-card-title { font-family: var(--font-display); font-size: 1.15rem; font-weight: 600; margin-bottom: 0.5rem; }
-    .project-card-summary { font-size: 0.9rem; color: var(--fg-muted); line-height: 1.6; margin-bottom: 1rem; }
+    .project-card-title { font-family: var(--font-display); font-size: 1.15rem; font-weight: 600; margin-bottom: 0.5rem; line-height: 1.3; }
+    .project-card-summary { font-size: 0.9rem; color: var(--fg-muted); line-height: 1.6; margin-bottom: 1rem; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
     .project-card-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
     .project-tag { padding: 0.25rem 0.6rem; background: var(--bg); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); font-size: 0.7rem; font-weight: 500; color: var(--fg-dim); }
 
-    /* Modal */
     .modal-overlay { position: fixed; inset: 0; z-index: 200; display: flex; align-items: center; justify-content: center; padding: 2rem; opacity: 0; visibility: hidden; transition: var(--transition); }
     .modal-overlay.active { opacity: 1; visibility: visible; }
     .modal-backdrop { position: absolute; inset: 0; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(10px); }
     .modal { position: relative; width: 100%; max-width: 900px; max-height: 90vh; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; transform: scale(0.95) translateY(20px); transition: var(--transition); }
     .modal-overlay.active .modal { transform: scale(1) translateY(0); }
     .modal-header { display: flex; align-items: flex-start; justify-content: space-between; padding: 1.5rem 2rem; border-bottom: 1px solid var(--border-subtle); }
-    .modal-title { font-family: var(--font-display); font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .modal-title { font-family: var(--font-display); font-size: 1.4rem; font-weight: 700; margin-bottom: 0.5rem; line-height: 1.3; }
     .modal-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
     .modal-close { position: absolute; top: 1rem; right: 1rem; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background: var(--bg); border-radius: var(--radius-sm); color: var(--fg-muted); transition: var(--transition); }
     .modal-close:hover { background: var(--accent); color: #fff; }
@@ -218,10 +203,7 @@
     .modal-section { margin-bottom: 2rem; }
     .modal-section:last-child { margin-bottom: 0; }
     .modal-section-title { font-family: var(--font-display); font-size: 1rem; font-weight: 600; margin-bottom: 1rem; color: var(--secondary); text-transform: uppercase; letter-spacing: 0.05em; }
-    .modal-summary { font-size: 1rem; color: var(--fg-muted); line-height: 1.7; }
-    .modal-list { display: flex; flex-direction: column; gap: 0.75rem; }
-    .modal-list-item { display: flex; align-items: flex-start; gap: 0.75rem; font-size: 0.95rem; color: var(--fg-muted); }
-    .modal-list-icon { flex-shrink: 0; width: 20px; height: 20px; margin-top: 2px; }
+    .modal-summary { font-size: 1rem; color: var(--fg-muted); line-height: 1.8; }
     .modal-snapshot { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1rem; background: var(--bg); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 1.5rem; }
     .snapshot-item { display: flex; flex-direction: column; gap: 0.25rem; }
     .snapshot-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--fg-dim); }
@@ -232,7 +214,6 @@
     .modal-gallery-item:hover img { transform: scale(1.05); }
     .modal-cta { padding-top: 1.5rem; border-top: 1px solid var(--border-subtle); }
 
-    /* About */
     .about-section { background: var(--bg-elevated); }
     .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
     .about-content h3 { font-family: var(--font-display); font-size: 1.75rem; font-weight: 700; margin-bottom: 1.5rem; }
@@ -245,80 +226,20 @@
     .about-image { position: relative; border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--border-subtle); z-index: 2; }
     .about-image img { width: 100%; height: 400px; object-fit: cover; filter: grayscale(20%); }
 
-    /* Contact */
     .contact-section { position: relative; overflow: hidden; }
     .contact-bg { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 0%, rgba(253, 1, 0, 0.15) 0%, transparent 60%); z-index: 1; pointer-events: none; }
     .contact-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 4rem; position: relative; z-index: 2; }
     .contact-content h2 { font-family: var(--font-display); font-size: clamp(2rem, 4vw, 2.5rem); font-weight: 700; margin-bottom: 1rem; }
     .contact-content p { font-size: 1.1rem; color: var(--fg-muted); margin-bottom: 2rem; }
-    
-    /* Contact Form Styling */
-    .contact-form {
-      display: flex;
-      flex-direction: column;
-      gap: 1.25rem;
-    }
-    .form-row {
-      display: flex;
-      gap: 1rem;
-    }
-    .form-group {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-    .form-label {
-      font-size: 0.85rem;
-      font-weight: 500;
-      color: var(--fg-muted);
-    }
-    .form-input, .form-textarea {
-      width: 100%;
-      padding: 0.85rem 1rem;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      color: var(--fg);
-      font-family: inherit;
-      font-size: 1rem;
-      transition: var(--transition);
-    }
-    .form-input:focus, .form-textarea:focus {
-      outline: none;
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(253, 1, 0, 0.2);
-    }
-    .form-textarea {
-      min-height: 150px;
-      resize: vertical;
-    }
-    .form-submit {
-      align-self: flex-start;
-      padding: 1rem 2.5rem;
-      font-size: 1rem;
-      margin-top: 0.5rem;
-    }
-    
-    /* Honeypot field - hidden from humans, visible to bots */
-    .honeypot {
-      position: absolute;
-      left: -9999px;
-    }
-
-    .form-success {
-      display: none;
-      padding: 1.5rem;
-      background: rgba(16, 185, 129, 0.1);
-      border: 1px solid var(--success);
-      border-radius: var(--radius-md);
-      color: var(--success);
-      text-align: center;
-    }
-    .form-success.show {
-      display: block;
-    }
-
+    .contact-form { display: flex; flex-direction: column; gap: 1.25rem; }
+    .form-row { display: flex; gap: 1rem; }
+    .form-group { flex: 1; display: flex; flex-direction: column; gap: 0.5rem; }
+    .form-label { font-size: 0.85rem; font-weight: 500; color: var(--fg-muted); }
+    .form-input, .form-textarea { width: 100%; padding: 0.85rem 1rem; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--fg); font-family: inherit; font-size: 1rem; transition: var(--transition); }
+    .form-input:focus, .form-textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(253, 1, 0, 0.2); }
+    .form-textarea { min-height: 150px; resize: vertical; }
+    .form-submit { align-self: flex-start; padding: 1rem 2.5rem; font-size: 1rem; margin-top: 0.5rem; }
+    .honeypot { position: absolute; left: -9999px; }
     .contact-info { display: flex; flex-direction: column; gap: 1.5rem; margin-top: 2rem; }
     .contact-item { display: flex; align-items: flex-start; gap: 1rem; }
     .contact-icon { width: 24px; height: 24px; color: var(--secondary); flex-shrink: 0; margin-top: 2px; }
@@ -332,7 +253,6 @@
     .contact-stat-value { font-family: var(--font-display); font-size: 2rem; font-weight: 700; color: var(--secondary); line-height: 1; margin-bottom: 0.5rem; }
     .contact-stat-label { font-size: 0.85rem; color: var(--fg-dim); }
 
-    /* Footer */
     .footer { background: var(--bg-elevated); border-top: 1px solid var(--border-subtle); padding: 3rem 2rem 2rem; position: relative; z-index: 10; }
     .footer-inner { max-width: 1400px; margin: 0 auto; }
     .footer-main { display: flex; justify-content: space-between; align-items: flex-start; gap: 2rem; flex-wrap: wrap; padding-bottom: 2rem; border-bottom: 1px solid var(--border-subtle); margin-bottom: 2rem; }
@@ -353,7 +273,6 @@
     .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s ease, transform 0.8s ease; }
     .reveal.revealed { opacity: 1; transform: translateY(0); }
 
-    /* Responsive */
     @media (max-width: 1024px) { .about-grid { grid-template-columns: 1fr; gap: 3rem; } .about-image { order: -1; } .contact-grid { grid-template-columns: 1fr; gap: 3rem; } }
     @media (max-width: 768px) {
       .header { padding: 1rem; } .nav-links, .nav-actions { display: none; } .mobile-menu-btn { display: flex; }
@@ -368,7 +287,6 @@
     }
     @media (max-width: 480px) { .hero-title { font-size: 2rem; } .projects-grid { grid-template-columns: 1fr; } .modal-gallery { grid-template-columns: 1fr; } }
 
-    /* Mobile Menu */
     .mobile-menu { position: fixed; top: 0; right: 0; bottom: 0; width: 280px; background: var(--bg-elevated); border-left: 1px solid var(--border); z-index: 300; padding: 1.5rem; transform: translateX(100%); transition: var(--transition); }
     .mobile-menu.active { transform: translateX(0); }
     .mobile-menu-header { display: flex; justify-content: flex-end; margin-bottom: 2rem; }
@@ -624,8 +542,7 @@
             <h2>Send us your specs</h2>
             <p>Ready to start your project? Fill out the form below and our engineering team will get back to you.</p>
             
-            <!-- Secure Contact Form -->
-            <form class="contact-form" id="contactForm">
+            <form class="contact-form" id="contactForm" action="https://formspree.io/f/YOUR_FORM_ID_HERE" method="POST">
               <div class="form-row">
                 <div class="form-group">
                   <label class="form-label" for="name">Your Name</label>
@@ -647,16 +564,11 @@
                 <textarea id="message" name="message" class="form-textarea" placeholder="Tell us about your project requirements..." required></textarea>
               </div>
 
-              <!-- Honeypot field (hidden from humans) -->
-              <input type="text" name="website" class="honeypot" tabindex="-1" autocomplete="off">
+              <input type="text" name="_gotcha" class="honeypot" tabindex="-1" autocomplete="off">
+              <input type="hidden" name="_subject" value="New Website Inquiry">
               
               <button type="submit" class="btn btn-primary form-submit">Send Message</button>
             </form>
-
-            <div class="form-success" id="formSuccess">
-              <h3>Message Sent!</h3>
-              <p>Thank you for reaching out. We'll review your inquiry and get back to you shortly.</p>
-            </div>
 
             <div class="contact-info">
               <div class="contact-item"><svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><div class="contact-item-text"><strong>Address</strong>2080 Northwest Dr., Cincinnati, OH 45231</div></div>
@@ -727,26 +639,145 @@
       'https://images.unsplash.com/photo-1565043666747-69f6646db940?w=1920&q=80',
       'https://images.unsplash.com/photo-1518770660439-4636190af475?w=1920&q=80',
       'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?w=1920&q=80',
-      'https://images.unsplash.com/photo-1551076805-e1869033e561?w=1920&q=80',
-      'https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=1920&q=80',
-      'https://images.unsplash.com/photo-1581092921461-eab62e97a780?w=1920&q=80',
-      'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1920&q=80'
+      'https://images.unsplash.com/photo-1551076805-e1869033e561?w=1920&q=80'
     ];
 
+    // --- Project Data with Simplified Paths ---
+    // Path Structure: Project Pictures/Proj #/Thermo_Site_P.#.#.png
+    
     const PROJECTS = [
-      { id: 1, title: "Confidential Biotech Stability Room", year: 2024, isFeatured: true, industryTags: ["Biotech/Pharma"], projectTypeTags: ["New Build"], systemCategory: "Environmental Room", capabilityTags: ["Stability", "Temperature Control", "Humidity Control"], summary: "A purpose-built stability chamber designed for long-term pharmaceutical storage and testing under tightly controlled conditions.", challengeBullets: ["Required precise temperature uniformity across a large storage volume", "Client needed 21 CFR Part 11 compliant monitoring and data logging", "Limited mechanical space for conditioning equipment"], solutionBullets: ["Custom air handling system with redundant cooling circuits", "Integrated SCADA system with role-based access and audit trails", "Compact conditioning unit mounted on the chamber exterior"], snapshotKV: { "System Category": "Environmental Room", "Delivery Type": "New Build", "Controls": "PLC with SCADA", "Monitoring": "21 CFR Part 11 Compliant", "Commissioning": "Full IQ/OQ/PQ", "Serviceability": "Front-access components", "Location": "Confidential / Northeast" }, images: ["https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?w=600&q=80", "https://images.unsplash.com/photo-1582719471384-894fbb16e074?w=600&q=80", "https://images.unsplash.com/photo-1581093458791-9d42e3c41e2c?w=600&q=80", "https://images.unsplash.com/photo-1576086213369-97a306d36557?w=600&q=80"] },
-      { id: 2, title: "University Research Environmental Room", year: 2023, isFeatured: true, industryTags: ["University/Research"], projectTypeTags: ["New Build"], systemCategory: "Environmental Room", capabilityTags: ["Research", "Flexibility", "Monitoring"], summary: "A versatile environmental chamber for a university research facility, supporting multiple temperature and humidity profiles.", challengeBullets: ["Research protocols required rapid temperature cycling capability", "Multiple user groups with different access and scheduling needs", "Integration with existing building management system"], solutionBullets: ["High-capacity conditioning system for rapid thermal response", "Web-based scheduling and access control interface", "BACnet integration with campus BMS for centralized monitoring"], snapshotKV: { "System Category": "Environmental Room", "Delivery Type": "New Build", "Controls": "DDC with BACnet", "Monitoring": "Web-based interface", "Commissioning": "Performance testing", "Serviceability": "Standard components", "Location": "Midwest University" }, images: ["https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=600&q=80", "https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=600&q=80", "https://images.unsplash.com/photo-1621112943524-d8425af9ff2d?w=600&q=80"] },
-      { id: 3, title: "Manufacturing Controls Retrofit", year: 2023, isFeatured: false, industryTags: ["Manufacturing"], projectTypeTags: ["Retrofit"], systemCategory: "Controls", capabilityTags: ["Retrofit", "Monitoring", "Integration"], summary: "Modernized control systems for legacy environmental chambers in an electronics manufacturing facility.", challengeBullets: ["Existing chambers had obsolete controls with no spare parts", "Production could not tolerate extended downtime", "Historical data migration required for compliance"], solutionBullets: ["Phased retrofit approach with overnight and weekend work", "New PLC controls with backward-compatible I/O wiring", "Data migration from legacy historian to new SQL-based system"], snapshotKV: { "System Category": "Controls", "Delivery Type": "Retrofit", "Controls": "PLC-based", "Monitoring": "SQL historian", "Commissioning": "Startup verification", "Serviceability": "Off-the-shelf components", "Location": "Confidential / Southwest" }, images: ["https://images.unsplash.com/photo-1565043666747-69f6646db940?w=600&q=80", "https://images.unsplash.com/photo-1518770660439-4636190af475?w=600&q=80", "https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=600&q=80"] },
-      { id: 4, title: "Healthcare Storage Environment Upgrade", year: 2022, isFeatured: false, industryTags: ["Healthcare"], projectTypeTags: ["Retrofit"], systemCategory: "Environmental Room", capabilityTags: ["Healthcare", "Temperature Control", "Monitoring"], summary: "Upgraded cold storage environment for a hospital pharmacy, meeting USP 797 requirements.", challengeBullets: ["Strict temperature monitoring and alarm requirements", "Continuous operation required during upgrade", "Limited mechanical room space for equipment"], solutionBullets: ["Redundant refrigeration system with automatic changeover", "Phased installation with temporary cooling provisions", "Wall-mounted condensing units to conserve floor space"], snapshotKV: { "System Category": "Environmental Room", "Delivery Type": "Retrofit", "Controls": "DDC with alarms", "Monitoring": "USP 797 compliant", "Commissioning": "Temperature mapping", "Serviceability": "Redundant systems", "Location": "Regional Hospital / Midwest" }, images: ["https://images.unsplash.com/photo-1516549655169-df83a0774514?w=600&q=80", "https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=600&q=80", "https://images.unsplash.com/photo-1551076805-e1869033e561?w=600&q=80"] },
-      { id: 5, title: "Advanced Materials Conditioning System", year: 2024, isFeatured: true, industryTags: ["Aerospace/Advanced Materials"], projectTypeTags: ["New Build"], systemCategory: "Conditioning", capabilityTags: ["Precision", "Temperature Control", "Integration"], summary: "High-precision conditioning system for composite materials curing and storage in an aerospace application.", challengeBullets: ["Extremely tight temperature tolerance required across large chamber", "Process required specific ramp rates and dwell times", "Clean room compatibility for sensitive materials"], solutionBullets: ["Custom air handling unit with VFD-controlled fans", "Recipe-driven control system for automated process cycles", "HEPA filtration and stainless steel interior surfaces"], snapshotKV: { "System Category": "Conditioning", "Delivery Type": "New Build", "Controls": "Recipe-based PLC", "Monitoring": "Process data logging", "Commissioning": "Full validation", "Serviceability": "Clean room compatible", "Location": "Confidential / West Coast" }, images: ["https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=600&q=80", "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?w=600&q=80", "https://images.unsplash.com/photo-1581092921461-eab62e97a780?w=600&q=80", "https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=600&q=80"] },
-      { id: 6, title: "Pharma Humidity Control Retrofit", year: 2022, isFeatured: false, industryTags: ["Biotech/Pharma"], projectTypeTags: ["Retrofit"], systemCategory: "Conditioning", capabilityTags: ["Humidity Control", "Retrofit", "Stability"], summary: "Added precise humidity control capability to an existing stability chamber for a pharmaceutical company.", challengeBullets: ["Existing chamber lacked humidity control for new product requirements", "GMP validation required for modified system", "Integration with legacy control infrastructure"], solutionBullets: ["Steam humidification system with precision dewpoint control", "Protocol-driven qualification documentation package", "Gateway module for legacy BMS communication"], snapshotKV: { "System Category": "Conditioning", "Delivery Type": "Retrofit", "Controls": "Integrated with legacy", "Monitoring": "Validated data logging", "Commissioning": "IQ/OQ documentation", "Serviceability": "Modular components", "Location": "Confidential / Mid-Atlantic" }, images: ["https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=600&q=80", "https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?w=600&q=80", "https://images.unsplash.com/photo-1576086213369-97a306d36557?w=600&q=80"] },
-      { id: 7, title: "Aerospace Test Environment Build", year: 2023, isFeatured: false, industryTags: ["Aerospace/Advanced Materials"], projectTypeTags: ["New Build"], systemCategory: "Environmental Room", capabilityTags: ["Testing", "Precision", "Temperature Control"], summary: "Environmental test chamber for aerospace component qualification testing.", challengeBullets: ["Wide temperature range from -40C to +85C required", "High airflow uniformity for thermal shock testing", "Seismic restraint requirements for facility location"], solutionBullets: ["Dual-stage refrigeration system for extreme temperature capability", "Perforated floor and ceiling plenums for uniform airflow", "Custom seismic mounting frame with certified restraints"], snapshotKV: { "System Category": "Environmental Room", "Delivery Type": "New Build", "Controls": "PLC with HMI", "Monitoring": "Test data acquisition", "Commissioning": "Temperature uniformity mapping", "Serviceability": "Accessible equipment room", "Location": "Aerospace Facility / West" }, images: ["https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?w=600&q=80", "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=600&q=80", "https://images.unsplash.com/photo-1581092921461-eab62e97a780?w=600&q=80"] },
-      { id: 8, title: "Controls Modernization for Environmental Suite", year: 2021, isFeatured: false, industryTags: ["University/Research"], projectTypeTags: ["Controls Upgrade"], systemCategory: "Controls", capabilityTags: ["Retrofit", "Monitoring", "Integration"], summary: "Comprehensive controls upgrade for a suite of research environmental chambers at a major university.", challengeBullets: ["Multiple chambers with varied ages and control systems", "Researchers needed unified interface across all chambers", "Budget constraints required phased implementation"], solutionBullets: ["Standardized control platform for all chamber types", "Single web-based dashboard for all chambers campus-wide", "Modular implementation to spread costs across fiscal years"], snapshotKV: { "System Category": "Controls", "Delivery Type": "Controls Upgrade", "Controls": "Unified DDC platform", "Monitoring": "Central dashboard", "Commissioning": "Phased verification", "Serviceability": "Standardized parts", "Location": "Major University / Midwest" }, images: ["https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=600&q=80", "https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=600&q=80", "https://images.unsplash.com/photo-1621112943524-d8425af9ff2d?w=600&q=80"] },
-      { id: 9, title: "Process Stability Room Commissioning", year: 2020, isFeatured: false, industryTags: ["Manufacturing"], projectTypeTags: ["New Build"], systemCategory: "Environmental Room", capabilityTags: ["Stability", "Commissioning", "Integration"], summary: "New environmental room for process stability testing in a specialty chemicals manufacturing plant.", challengeBullets: ["Hazardous area classification required for room location", "Specific temperature and humidity profiles for different products", "Integration with plant DCS for production scheduling"], solutionBullets: ["Explosion-proof electrical components and instrumentation", "Recipe-based control system for multiple test profiles", "OPC-UA communication with plant distributed control system"], snapshotKV: { "System Category": "Environmental Room", "Delivery Type": "New Build", "Controls": "PLC with DCS link", "Monitoring": "Plant DCS integrated", "Commissioning": "Full validation", "Serviceability": "Hazardous area rated", "Location": "Chemical Plant / Gulf Coast" }, images: ["https://images.unsplash.com/photo-1565043666747-69f6646db940?w=600&q=80", "https://images.unsplash.com/photo-1518770660439-4636190af475?w=600&q=80", "https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=600&q=80"] },
-      { id: 10, title: "Industrial Conditioning System Integration", year: 2019, isFeatured: false, industryTags: ["Manufacturing"], projectTypeTags: ["New Build"], systemCategory: "Conditioning", capabilityTags: ["Integration", "Temperature Control", "Manufacturing"], summary: "Integrated conditioning system for a precision manufacturing environment requiring strict thermal control.", challengeBullets: ["Large space with varying heat loads from process equipment", "Energy efficiency targets required by corporate policy", "24/7 operation with minimal maintenance windows"], solutionBullets: ["Zoned air handling with demand-based ventilation", "Heat recovery from process exhaust for energy efficiency", "Predictive maintenance monitoring on rotating equipment"], snapshotKV: { "System Category": "Conditioning", "Delivery Type": "New Build", "Controls": "DDC with optimization", "Monitoring": "Predictive maintenance", "Commissioning": "Performance verification", "Serviceability": "Online monitoring", "Location": "Manufacturing Plant / Great Lakes" }, images: ["https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=600&q=80", "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=600&q=80", "https://images.unsplash.com/photo-1518770660439-4636190af475?w=600&q=80", "https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=600&q=80"] }
+      {
+        id: 1,
+        title: "San Diego, Container",
+        year: 2023,
+        isFeatured: true,
+        industryTags: ["Biotech/Pharma"],
+        projectTypeTags: ["Retrofit"],
+        systemCategory: "Environmental Room",
+        capabilityTags: ["Stability", "Conditioning", "Modular"],
+        summary: "Thermolinear recently delivered a customized environmental solution for a client in San Diego by modifying a standard refrigerated shipping container to precisely control both temperature and humidity. This innovative adaptation enabled the customer to launch their stability study without the delays and costs associated with new construction and complex permitting processes.",
+        snapshotKV: { "Location": "San Diego, CA", "Type": "Container Retrofit", "Key Benefit": "Speed & Cost Savings", "Feature": "Temp & Humidity Control" },
+        images: ["Project Pictures/Proj 1/Thermo_Site_P.1.1.png", "Project Pictures/Proj 1/Thermo_Site_P.1.2.png"]
+      },
+      {
+        id: 2,
+        title: "Upgrading Legacy Systems: Modern Controls with Minimal Downtime",
+        year: 2022,
+        isFeatured: false,
+        industryTags: ["Manufacturing"],
+        projectTypeTags: ["Controls Upgrade"],
+        systemCategory: "Controls",
+        capabilityTags: ["Retrofit", "Modernization", "Efficiency"],
+        summary: "Thermolinear recently completed a strategic control system upgrade, transforming an early 1980s-era control panel into a state-of-the-art system inside the original control enclosure. This modernization effort allowed our customer to significantly enhance the performance and reliability of their ovens without the need for full equipment replacement.",
+        snapshotKV: { "Original Era": "Early 1980s", "Strategy": "Phased Upgrade", "Downtime": "Minimal", "Result": "State-of-the-Art System" },
+        images: ["Project Pictures/Proj 2/Thermo_Site_P.2.1.png", "Project Pictures/Proj 2/Thermo_Site_P.2.2.png"]
+      },
+      {
+        id: 3,
+        title: "CWRU stainless front 4°C unit",
+        year: 2021,
+        isFeatured: true,
+        industryTags: ["University/Research"],
+        projectTypeTags: ["New Build"],
+        systemCategory: "Environmental Room",
+        capabilityTags: ["Biological Research", "Precision Cooling", "Durability"],
+        summary: "Thermolinear consistently provides precision-controlled environments, consider the installation of this stainless steel front 4°C cooler in a leading biological research facility. Renowned for our ability to deliver high-quality, reliable solutions with efficiency, we specialize in temperature-controlled rooms that maintain a consistent 4°C ±2°C—critical for scientific accuracy.",
+        snapshotKV: { "Institution Type": "Biological Research", "Temperature": "4°C ±2°C", "Material": "Stainless Steel Front", "Features": "Viewing Window" },
+        images: ["Project Pictures/Proj 3/Thermo_Site_P.3.1.png"]
+      },
+      {
+        id: 4,
+        title: "Existing Basement",
+        year: 2020,
+        isFeatured: false,
+        industryTags: ["University/Research"],
+        projectTypeTags: ["New Build"],
+        systemCategory: "Environmental Room",
+        capabilityTags: ["Retrofit", "Precision Fit", "Constraints"],
+        summary: "Thermolinear excels in designing and installing temperature-controlled rooms within tight building constraints, as demonstrated in this recent project within the basement of an older university facility. Faced with existing mechanical obstructions—such as the pipe in the foreground, which could not be relocated without significant cost—we meticulously took field measurements to ensure a precise fit.",
+        snapshotKV: { "Environment": "Basement Retrofit", "Constraint": "Structural Obstructions", "Method": "Field Measurements", "Result": "Maximized Available Space" },
+        images: ["Project Pictures/Proj 4/Thermo_Site_P.4.1.png"]
+      },
+      {
+        id: 5,
+        title: "Qure Med",
+        year: 2023,
+        isFeatured: false,
+        industryTags: ["Healthcare"],
+        projectTypeTags: ["New Build"],
+        systemCategory: "Environmental Room",
+        capabilityTags: ["Speed", "Efficiency", "Cost-Effective"],
+        summary: "Thermolinear’s ability to deliver high-quality, efficient solutions is showcased in this 'white-box' temperature-controlled room. Rather than overcomplicating the project, we focused on speed and precision, ensuring a swift installation without unnecessary redesign. In less than a week, we successfully installed the room and refrigeration system.",
+        snapshotKV: { "Client": "Qure Med", "Timeline": "< 1 Week", "Strategy": "Minimal Redesign", "Mounting": "Existing Roof Curb" },
+        images: ["Project Pictures/Proj 5/Thermo_Site_P.5.1.png", "Project Pictures/Proj 5/Thermo_Site_P.5.2.png"]
+      },
+      {
+        id: 6,
+        title: "OUHCOM",
+        year: 2022,
+        isFeatured: false,
+        industryTags: ["Healthcare"],
+        projectTypeTags: ["New Build"],
+        systemCategory: "Environmental Room",
+        capabilityTags: ["Budget-Conscious", "Redundancy", "Large Scale"],
+        summary: "Thermolinear remains committed to providing cost-effective yet highly reliable solutions, as demonstrated in this large morgue installation. Understanding the client’s budget constraints, we engineered a system that balances affordability with operational security. By incorporating multiple ceiling-hung evaporators and multiple outdoor condensers, we ensured the room maintains temperature even if one system is offline.",
+        snapshotKV: { "Facility": "OUHCOM Morgue", "Evaporators": "Multiple Ceiling-Hung", "Redundancy": "Partial (Operational Security)", "Approach": "Budget Optimized" },
+        images: ["Project Pictures/Proj 6/Thermo_Site_P.6.1.png"]
+      },
+      {
+        id: 7,
+        title: "Challenges",
+        year: 2020,
+        isFeatured: false,
+        industryTags: ["Company"],
+        projectTypeTags: ["Service"],
+        systemCategory: "Service",
+        capabilityTags: ["Dedication", "Safety", "On-Site Installation"],
+        summary: "At Thermolinear, our commitment to excellence never wavered—even during the most challenging times of the COVID-19 pandemic. As shown in these photos, our dedicated technicians continued to deliver high-quality work while adapting to necessary health and safety protocols.",
+        snapshotKV: { "Context": "COVID-19 Pandemic", "Commitment": "Unwavering", "Safety": "Adapted Protocols", "Team Culture": "Positive & Dedicated" },
+        images: ["Project Pictures/Proj 7/Thermo_Site_P.7.1.png", "Project Pictures/Proj 7/Thermo_Site_P.7.2.png"]
+      },
+      {
+        id: 8,
+        title: "Pressure",
+        year: 2021,
+        isFeatured: true,
+        industryTags: ["Manufacturing"],
+        projectTypeTags: ["New Build"],
+        systemCategory: "Environmental Room",
+        capabilityTags: ["Pressure Control", "Cleanroom", "Compliance"],
+        summary: "Thermolinear specializes in designing and building temperature-controlled rooms that meet precise pressure differential requirements, as exemplified by this Magnehelic pressure gauge. Many of our installations serve critical applications in medical and manufacturing environments where maintaining consistent pressure is just as essential as controlling temperature and humidity.",
+        snapshotKV: { "Focus": "Pressure Differential", "Monitoring": "Magnehelic Gauge", "Applications": "Cleanroom / Containment", "Compliance": "Industry Specific" },
+        images: ["Project Pictures/Proj 8/Thermo_Site_P.8.1.png"]
+      },
+      {
+        id: 9,
+        title: "Rapid Prototyping",
+        year: 2023,
+        isFeatured: true,
+        industryTags: ["Manufacturing"],
+        projectTypeTags: ["Prototyping"],
+        systemCategory: "Conditioning",
+        capabilityTags: ["Innovation", "Risk Reduction", "Speed"],
+        summary: "At Thermolinear, we prioritize innovation and risk reduction in every custom solution we deliver. These photos showcase a proof-of-concept project alongside its final built solution—developed for a large manufacturer seeking a major design change. By leveraging materials we had on hand, we constructed and tested a functional mock-up within a month.",
+        snapshotKV: { "Client": "Large Manufacturer", "Phase 1": "Proof of Concept", "Timeline": "1 Month Mockup", "Risk": "Minimized" },
+        images: ["Project Pictures/Proj 9/Thermo_Site_P.9.1.png", "Project Pictures/Proj 9/Thermo_Site_P.9.2.png", "Project Pictures/Proj 9/Thermo_Site_P.9.3.png"]
+      },
+      {
+        id: 10,
+        title: "Prebuild Service",
+        year: 2022,
+        isFeatured: false,
+        industryTags: ["Service"],
+        projectTypeTags: ["Service"],
+        systemCategory: "Service",
+        capabilityTags: ["Quality Assurance", "Testing", "Reliability"],
+        summary: "At Thermolinear, we will go the extra mile to ensure quality and reliability before our products ever reach the customer’s site. This image showcases one of our prebuilt rooms, fully assembled and tested in our shop prior to delivery. For clients who require added assurance, we offer the capability to construct and run complete units in-house—space permitting.",
+        snapshotKV: { "Service": "Prebuild Verification", "Benefit": "Peace of Mind", "Testing": "In-House Run-Up", "Delivery": "Ready-to-Install" },
+        images: ["Project Pictures/Proj 10/Thermo_Site_P.10.1.png"]
+      }
     ];
 
-    // --- Email Obfuscation Setup ---
     const EMAIL_USER = 'JonBell';
     const EMAIL_DOMAIN = 'cincinnatiair.com';
     
@@ -761,14 +792,11 @@
       });
     }
 
-    // --- App State ---
     let projectsGrid = null;
     let modalOverlay = null;
     let modalBody = null;
     let modalTitle = null;
     let modalTags = null;
-    let contactForm = null;
-    let formSuccess = null;
 
     function init() {
       projectsGrid = document.getElementById('projectsGrid');
@@ -776,11 +804,8 @@
       modalBody = document.getElementById('modalBody');
       modalTitle = document.getElementById('modalTitle');
       modalTags = document.getElementById('modalTags');
-      contactForm = document.getElementById('contactForm');
-      formSuccess = document.getElementById('formSuccess');
 
       setupEmailLinks();
-      setupContactForm();
       initDynamicBackgrounds();
       renderProjects();
       setupEventListeners();
@@ -789,30 +814,6 @@
       setupMobileMenu();
       setupAccordion();
       updateFooterYear();
-    }
-
-    // --- Secure Contact Form ---
-    function setupContactForm() {
-      if (!contactForm) return;
-
-      contactForm.addEventListener('submit', function(e) {
-        // Check honeypot (anti-spam)
-        const honeypot = contactForm.querySelector('input[name="website"]');
-        if (honeypot && honeypot.value) {
-          console.log('Bot detected.');
-          e.preventDefault();
-          return;
-        }
-
-        // Obfuscate the form action at submit time
-        const endpoint = 'https://formsubmit.co/' + getEmail();
-        contactForm.action = endpoint;
-        
-        // Show success message (the form will actually submit and page might reload, 
-        // but usually formsubmit redirects back, so this is a fallback UI trick or for AJAX use)
-        // For a static site with standard form submit, the page will redirect to a thank you page or back.
-        // We will rely on FormSubmit's default behavior.
-      });
     }
 
     function initDynamicBackgrounds() {
@@ -840,8 +841,25 @@
       if (!projectsGrid) return;
       projectsGrid.innerHTML = sorted.map(project => {
         const tags = [...project.industryTags, ...project.capabilityTags.slice(0, 2)];
-        return `<article class="project-card" data-id="${project.id}" tabindex="0" role="button" aria-label="View ${project.title} details"><div class="project-card-image"><img src="${project.images[0]}" alt="${project.title}" loading="lazy"><div class="project-card-overlay"></div>${project.isFeatured ? '<span class="project-card-featured">Featured</span>' : ''}<span class="project-card-year">${project.year}</span></div><div class="project-card-content"><h3 class="project-card-title">${project.title}</h3><p class="project-card-summary">${project.summary}</p><div class="project-card-tags">${tags.map(tag => `<span class="project-tag">${tag}</span>`).join('')}</div></div></article>`;
+        const galleryBadge = project.images.length > 1 
+          ? `<div class="project-card-gallery-badge"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg></div>` 
+          : '';
+
+        return `<article class="project-card" data-id="${project.id}" tabindex="0" role="button" aria-label="View ${project.title} details">
+          <div class="project-card-image">
+            <img src="${project.images[0]}" alt="${project.title}" loading="lazy">
+            <div class="project-card-overlay"></div>
+            ${galleryBadge}
+            ${project.isFeatured ? '<span class="project-card-featured">Featured</span>' : ''}
+          </div>
+          <div class="project-card-content">
+            <h3 class="project-card-title">${project.title}</h3>
+            <p class="project-card-summary">${project.summary}</p>
+            <div class="project-card-tags">${tags.map(tag => `<span class="project-tag">${tag}</span>`).join('')}</div>
+          </div>
+        </article>`;
       }).join('');
+
       projectsGrid.querySelectorAll('.project-card').forEach(card => {
         card.addEventListener('click', () => openModal(parseInt(card.dataset.id)));
         card.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openModal(parseInt(card.dataset.id)); } });
@@ -857,7 +875,36 @@
       const email = getEmail();
       
       if (modalBody) {
-        modalBody.innerHTML = `<div class="modal-section"><p class="modal-summary">${project.summary}</p></div><div class="modal-section"><h3 class="modal-section-title">Challenge</h3><ul class="modal-list">${project.challengeBullets.map(bullet => `<li class="modal-list-item"><svg class="modal-list-icon" viewBox="0 0 24 24" fill="none" stroke="var(--fg-dim)" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><span>${bullet}</span></li>`).join('')}</ul></div><div class="modal-section"><h3 class="modal-section-title">Solution</h3><ul class="modal-list">${project.solutionBullets.map(bullet => `<li class="modal-list-item"><svg class="modal-list-icon" viewBox="0 0 24 24" fill="none" stroke="var(--secondary)" stroke-width="2.5" stroke-linecap="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><span>${bullet}</span></li>`).join('')}</ul></div><div class="modal-section"><h3 class="modal-section-title">System Snapshot</h3><div class="modal-snapshot">${Object.entries(project.snapshotKV).map(([key, value]) => `<div class="snapshot-item"><span class="snapshot-label">${key}</span><span class="snapshot-value">${value}</span></div>`).join('')}</div></div><div class="modal-section"><h3 class="modal-section-title">Project Gallery</h3><div class="modal-gallery">${project.images.map(img => `<div class="modal-gallery-item"><img src="${img}" alt="Project image" loading="lazy"></div>`).join('')}</div></div><div class="modal-cta"><a href="mailto:${email}?subject=Inquiry%20about%20similar%20project%3A%20${encodeURIComponent(project.title)}" class="btn btn-primary">Email about a similar project</a></div>`;
+        modalBody.innerHTML = `
+          <div class="modal-section">
+            <h3 class="modal-section-title">Project Overview</h3>
+            <p class="modal-summary">${project.summary}</p>
+          </div>
+          <div class="modal-section">
+            <h3 class="modal-section-title">Key Details</h3>
+            <div class="modal-snapshot">
+              ${Object.entries(project.snapshotKV).map(([key, value]) => `
+                <div class="snapshot-item">
+                  <span class="snapshot-label">${key}</span>
+                  <span class="snapshot-value">${value}</span>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+          <div class="modal-section">
+            <h3 class="modal-section-title">Project Gallery</h3>
+            <div class="modal-gallery">
+              ${project.images.map(img => `
+                <div class="modal-gallery-item">
+                  <img src="${img}" alt="Project image" loading="lazy">
+                </div>
+              `).join('')}
+            </div>
+          </div>
+          <div class="modal-cta">
+            <a href="mailto:${email}?subject=Inquiry%20about%20similar%20project%3A%20${encodeURIComponent(project.title)}" class="btn btn-primary">Email about a similar project</a>
+          </div>
+        `;
       }
       modalOverlay.classList.add('active');
       document.body.classList.add('modal-open');
