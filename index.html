@@ -189,17 +189,118 @@
     .project-card-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
     .project-tag { padding: 0.25rem 0.6rem; background: var(--bg); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); font-size: 0.7rem; font-weight: 500; color: var(--fg-dim); }
 
+    /* Modal */
     .modal-overlay { position: fixed; inset: 0; z-index: 200; display: flex; align-items: center; justify-content: center; padding: 2rem; opacity: 0; visibility: hidden; transition: var(--transition); }
     .modal-overlay.active { opacity: 1; visibility: visible; }
     .modal-backdrop { position: absolute; inset: 0; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(10px); }
-    .modal { position: relative; width: 100%; max-width: 900px; max-height: 90vh; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; transform: scale(0.95) translateY(20px); transition: var(--transition); }
+    .modal { position: relative; width: 100%; max-width: 900px; max-height: 90vh; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; transform: scale(0.95) translateY(20px); transition: var(--transition); display: flex; flex-direction: column; }
     .modal-overlay.active .modal { transform: scale(1) translateY(0); }
-    .modal-header { display: flex; align-items: flex-start; justify-content: space-between; padding: 1.5rem 2rem; border-bottom: 1px solid var(--border-subtle); }
+    .modal-close { position: absolute; top: 1rem; right: 1rem; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background: var(--bg); border-radius: var(--radius-sm); color: var(--fg-muted); transition: var(--transition); z-index: 10; }
+    .modal-close:hover { background: var(--accent); color: #fff; }
+    
+    /* Modal Image Deck */
+    .modal-media-deck {
+      position: relative;
+      width: 100%;
+      height: 350px;
+      background: var(--bg);
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+    
+    /* The Cards */
+    .deck-card {
+      position: absolute;
+      width: 85%;
+      height: 90%;
+      left: 7.5%;
+      top: 5%;
+      border-radius: var(--radius-md);
+      background: var(--bg-card);
+      overflow: hidden;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+      transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s ease, box-shadow 0.5s ease;
+      cursor: grab;
+    }
+    
+    .deck-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      pointer-events: none; /* Prevent drag image ghost */
+    }
+    
+    /* Stacking Logic */
+    .deck-card[data-position="0"] { z-index: 3; transform: translateX(0) scale(1); }
+    .deck-card[data-position="1"] { z-index: 2; transform: translateX(8%) scale(0.95) rotate(2deg); opacity: 0.9; }
+    .deck-card[data-position="2"] { z-index: 1; transform: translateX(16%) scale(0.9) rotate(4deg); opacity: 0.8; }
+    .deck-card[data-position="-1"] { transform: translateX(-120%) scale(0.9); opacity: 0; z-index: 0; pointer-events: none; }
+    .deck-card.hidden { opacity: 0; pointer-events: none; transform: scale(0.8); }
+    
+    /* Single Image Adjustment */
+    .modal-media-deck.single-image .deck-card {
+      width: 100%;
+      height: 100%;
+      left: 0;
+      top: 0;
+      cursor: default;
+    }
+    
+    /* Deck Navigation Dots */
+    .deck-dots {
+      position: absolute;
+      bottom: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 8px;
+      z-index: 5;
+    }
+    .deck-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.3);
+      transition: all 0.3s ease;
+      border: none;
+      padding: 0;
+    }
+    .deck-dot.active {
+      background: #fff;
+      transform: scale(1.3);
+    }
+
+    /* Deck Navigation Arrows */
+    .deck-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 5;
+      background: rgba(0,0,0,0.5);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: 0.2s;
+    }
+    .deck-nav:hover { background: var(--accent); border-color: var(--accent); }
+    .deck-nav.prev { left: 10px; }
+    .deck-nav.next { right: 10px; }
+    
+    /* Hide arrows if only one image */
+    .modal-media-deck.single-image .deck-nav,
+    .modal-media-deck.single-image .deck-dots {
+      display: none;
+    }
+
+    .modal-header { padding: 1.5rem 2rem; border-bottom: 1px solid var(--border-subtle); }
     .modal-title { font-family: var(--font-display); font-size: 1.4rem; font-weight: 700; margin-bottom: 0.5rem; line-height: 1.3; }
     .modal-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
-    .modal-close { position: absolute; top: 1rem; right: 1rem; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background: var(--bg); border-radius: var(--radius-sm); color: var(--fg-muted); transition: var(--transition); }
-    .modal-close:hover { background: var(--accent); color: #fff; }
-    .modal-body { max-height: calc(90vh - 100px); overflow-y: auto; padding: 2rem; }
+    .modal-body { max-height: calc(90vh - 350px - 80px); overflow-y: auto; padding: 2rem; flex-grow: 1; }
     .modal-section { margin-bottom: 2rem; }
     .modal-section:last-child { margin-bottom: 0; }
     .modal-section-title { font-family: var(--font-display); font-size: 1rem; font-weight: 600; margin-bottom: 1rem; color: var(--secondary); text-transform: uppercase; letter-spacing: 0.05em; }
@@ -208,10 +309,6 @@
     .snapshot-item { display: flex; flex-direction: column; gap: 0.25rem; }
     .snapshot-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--fg-dim); }
     .snapshot-value { font-size: 0.95rem; font-weight: 500; color: var(--fg); }
-    .modal-gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
-    .modal-gallery-item { position: relative; aspect-ratio: 4/3; border-radius: var(--radius-md); overflow: hidden; border: 1px solid var(--border-subtle); }
-    .modal-gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; }
-    .modal-gallery-item:hover img { transform: scale(1.05); }
     .modal-cta { padding-top: 1.5rem; border-top: 1px solid var(--border-subtle); }
 
     .about-section { background: var(--bg-elevated); }
@@ -280,12 +377,13 @@
       .section { padding: 4rem 1.5rem; }
       .process-timeline { flex-direction: column; gap: 2rem; } .process-timeline::before { display: none; }
       .process-step { display: flex; align-items: flex-start; text-align: left; gap: 1rem; padding: 0; } .process-marker { margin: 0; flex-shrink: 0; }
-      .modal { margin: 1rem; max-height: 95vh; } .modal-body { padding: 1.5rem; } .modal-gallery { grid-template-columns: repeat(2, 1fr); }
+      .modal { margin: 1rem; max-height: 95vh; } .modal-body { padding: 1.5rem; } 
+      .modal-media-deck { height: 250px; }
       .footer-main { flex-direction: column; gap: 2rem; } .footer-links { flex-direction: column; gap: 2rem; } .footer-bottom { flex-direction: column; text-align: center; }
       .logo-img-container { height: 50px; }
       .form-row { flex-direction: column; }
     }
-    @media (max-width: 480px) { .hero-title { font-size: 2rem; } .projects-grid { grid-template-columns: 1fr; } .modal-gallery { grid-template-columns: 1fr; } }
+    @media (max-width: 480px) { .hero-title { font-size: 2rem; } .projects-grid { grid-template-columns: 1fr; } }
 
     .mobile-menu { position: fixed; top: 0; right: 0; bottom: 0; width: 280px; background: var(--bg-elevated); border-left: 1px solid var(--border); z-index: 300; padding: 1.5rem; transform: translateX(100%); transition: var(--transition); }
     .mobile-menu.active { transform: translateX(0); }
@@ -627,6 +725,20 @@
     <div class="modal-backdrop" id="modalBackdrop"></div>
     <div class="modal">
       <button class="modal-close" id="modalClose" aria-label="Close modal"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      
+      <!-- Image Deck Container -->
+      <div class="modal-media-deck" id="modalMediaDeck">
+         <!-- Nav Arrows -->
+        <button class="deck-nav prev" id="deckPrev" aria-label="Previous image">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <button class="deck-nav next" id="deckNext" aria-label="Next image">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+        <!-- Dots -->
+        <div class="deck-dots" id="deckDots"></div>
+      </div>
+
       <div class="modal-header"><div><h2 class="modal-title" id="modalTitle">Project Title</h2><div class="modal-tags" id="modalTags"></div></div></div>
       <div class="modal-body" id="modalBody"></div>
     </div>
@@ -642,139 +754,18 @@
       'https://images.unsplash.com/photo-1551076805-e1869033e561?w=1920&q=80'
     ];
 
-    // --- Project Data with "Project_Pictures_Compressed" Flat Folder Path ---
-    
+    // --- Project Data ---
     const PROJECTS = [
-      {
-        id: 1,
-        title: "San Diego, Container",
-        year: 2023,
-        isFeatured: true,
-        industryTags: ["Biotech/Pharma"],
-        projectTypeTags: ["Retrofit"],
-        systemCategory: "Environmental Room",
-        capabilityTags: ["Stability", "Conditioning", "Modular"],
-        summary: "Thermolinear recently delivered a customized environmental solution for a client in San Diego by modifying a standard refrigerated shipping container to precisely control both temperature and humidity. This innovative adaptation enabled the customer to launch their stability study without the delays and costs associated with new construction and complex permitting processes.",
-        snapshotKV: { "Location": "San Diego, CA", "Type": "Container Retrofit", "Key Benefit": "Speed & Cost Savings", "Feature": "Temp & Humidity Control" },
-        images: ["Project_Pictures_Compressed/Thermo_Site_P.1.1.png", "Project_Pictures_Compressed/Thermo_Site_P.1.2.png"]
-      },
-      {
-        id: 2,
-        title: "Upgrading Legacy Systems: Modern Controls with Minimal Downtime",
-        year: 2022,
-        isFeatured: false,
-        industryTags: ["Manufacturing"],
-        projectTypeTags: ["Controls Upgrade"],
-        systemCategory: "Controls",
-        capabilityTags: ["Retrofit", "Modernization", "Efficiency"],
-        summary: "Thermolinear recently completed a strategic control system upgrade, transforming an early 1980s-era control panel into a state-of-the-art system inside the original control enclosure. This modernization effort allowed our customer to significantly enhance the performance and reliability of their ovens without the need for full equipment replacement.",
-        snapshotKV: { "Original Era": "Early 1980s", "Strategy": "Phased Upgrade", "Downtime": "Minimal", "Result": "State-of-the-Art System" },
-        images: ["Project_Pictures_Compressed/Thermo_Site_P.2.1.png", "Project_Pictures_Compressed/Thermo_Site_P.2.2.png"]
-      },
-      {
-        id: 3,
-        title: "CWRU stainless front 4°C unit",
-        year: 2021,
-        isFeatured: true,
-        industryTags: ["University/Research"],
-        projectTypeTags: ["New Build"],
-        systemCategory: "Environmental Room",
-        capabilityTags: ["Biological Research", "Precision Cooling", "Durability"],
-        summary: "Thermolinear consistently provides precision-controlled environments, consider the installation of this stainless steel front 4°C cooler in a leading biological research facility. Renowned for our ability to deliver high-quality, reliable solutions with efficiency, we specialize in temperature-controlled rooms that maintain a consistent 4°C ±2°C—critical for scientific accuracy.",
-        snapshotKV: { "Institution Type": "Biological Research", "Temperature": "4°C ±2°C", "Material": "Stainless Steel Front", "Features": "Viewing Window" },
-        images: ["Project_Pictures_Compressed/Thermo_Site_P.3.1.png"]
-      },
-      {
-        id: 4,
-        title: "Existing Basement",
-        year: 2020,
-        isFeatured: false,
-        industryTags: ["University/Research"],
-        projectTypeTags: ["New Build"],
-        systemCategory: "Environmental Room",
-        capabilityTags: ["Retrofit", "Precision Fit", "Constraints"],
-        summary: "Thermolinear excels in designing and installing temperature-controlled rooms within tight building constraints, as demonstrated in this recent project within the basement of an older university facility. Faced with existing mechanical obstructions—such as the pipe in the foreground, which could not be relocated without significant cost—we meticulously took field measurements to ensure a precise fit.",
-        snapshotKV: { "Environment": "Basement Retrofit", "Constraint": "Structural Obstructions", "Method": "Field Measurements", "Result": "Maximized Available Space" },
-        images: ["Project_Pictures_Compressed/Thermo_Site_P.4.1.png"]
-      },
-      {
-        id: 5,
-        title: "Qure Med",
-        year: 2023,
-        isFeatured: false,
-        industryTags: ["Healthcare"],
-        projectTypeTags: ["New Build"],
-        systemCategory: "Environmental Room",
-        capabilityTags: ["Speed", "Efficiency", "Cost-Effective"],
-        summary: "Thermolinear’s ability to deliver high-quality, efficient solutions is showcased in this 'white-box' temperature-controlled room. Rather than overcomplicating the project, we focused on speed and precision, ensuring a swift installation without unnecessary redesign. In less than a week, we successfully installed the room and refrigeration system.",
-        snapshotKV: { "Client": "Qure Med", "Timeline": "< 1 Week", "Strategy": "Minimal Redesign", "Mounting": "Existing Roof Curb" },
-        images: ["Project_Pictures_Compressed/Thermo_Site_P.5.1.png", "Project_Pictures_Compressed/Thermo_Site_P.5.2.png"]
-      },
-      {
-        id: 6,
-        title: "OUHCOM",
-        year: 2022,
-        isFeatured: false,
-        industryTags: ["Healthcare"],
-        projectTypeTags: ["New Build"],
-        systemCategory: "Environmental Room",
-        capabilityTags: ["Budget-Conscious", "Redundancy", "Large Scale"],
-        summary: "Thermolinear remains committed to providing cost-effective yet highly reliable solutions, as demonstrated in this large morgue installation. Understanding the client’s budget constraints, we engineered a system that balances affordability with operational security. By incorporating multiple ceiling-hung evaporators and multiple outdoor condensers, we ensured the room maintains temperature even if one system is offline.",
-        snapshotKV: { "Facility": "OUHCOM Morgue", "Evaporators": "Multiple Ceiling-Hung", "Redundancy": "Partial (Operational Security)", "Approach": "Budget Optimized" },
-        images: ["Project_Pictures_Compressed/Thermo_Site_P.6.1.png"]
-      },
-      {
-        id: 7,
-        title: "Challenges",
-        year: 2020,
-        isFeatured: false,
-        industryTags: ["Company"],
-        projectTypeTags: ["Service"],
-        systemCategory: "Service",
-        capabilityTags: ["Dedication", "Safety", "On-Site Installation"],
-        summary: "At Thermolinear, our commitment to excellence never wavered—even during the most challenging times of the COVID-19 pandemic. As shown in these photos, our dedicated technicians continued to deliver high-quality work while adapting to necessary health and safety protocols.",
-        snapshotKV: { "Context": "COVID-19 Pandemic", "Commitment": "Unwavering", "Safety": "Adapted Protocols", "Team Culture": "Positive & Dedicated" },
-        images: ["Project_Pictures_Compressed/Thermo_Site_P.7.1.png", "Project_Pictures_Compressed/Thermo_Site_P.7.2.png"]
-      },
-      {
-        id: 8,
-        title: "Pressure",
-        year: 2021,
-        isFeatured: true,
-        industryTags: ["Manufacturing"],
-        projectTypeTags: ["New Build"],
-        systemCategory: "Environmental Room",
-        capabilityTags: ["Pressure Control", "Cleanroom", "Compliance"],
-        summary: "Thermolinear specializes in designing and building temperature-controlled rooms that meet precise pressure differential requirements, as exemplified by this Magnehelic pressure gauge. Many of our installations serve critical applications in medical and manufacturing environments where maintaining consistent pressure is just as essential as controlling temperature and humidity.",
-        snapshotKV: { "Focus": "Pressure Differential", "Monitoring": "Magnehelic Gauge", "Applications": "Cleanroom / Containment", "Compliance": "Industry Specific" },
-        images: ["Project_Pictures_Compressed/Thermo_Site_P.8.1.png"]
-      },
-      {
-        id: 9,
-        title: "Rapid Prototyping",
-        year: 2023,
-        isFeatured: true,
-        industryTags: ["Manufacturing"],
-        projectTypeTags: ["Prototyping"],
-        systemCategory: "Conditioning",
-        capabilityTags: ["Innovation", "Risk Reduction", "Speed"],
-        summary: "At Thermolinear, we prioritize innovation and risk reduction in every custom solution we deliver. These photos showcase a proof-of-concept project alongside its final built solution—developed for a large manufacturer seeking a major design change. By leveraging materials we had on hand, we constructed and tested a functional mock-up within a month.",
-        snapshotKV: { "Client": "Large Manufacturer", "Phase 1": "Proof of Concept", "Timeline": "1 Month Mockup", "Risk": "Minimized" },
-        images: ["Project_Pictures_Compressed/Thermo_Site_P.9.1.png", "Project_Pictures_Compressed/Thermo_Site_P.9.2.png", "Project_Pictures_Compressed/Thermo_Site_P.9.3.png"]
-      },
-      {
-        id: 10,
-        title: "Prebuild Service",
-        year: 2022,
-        isFeatured: false,
-        industryTags: ["Service"],
-        projectTypeTags: ["Service"],
-        systemCategory: "Service",
-        capabilityTags: ["Quality Assurance", "Testing", "Reliability"],
-        summary: "At Thermolinear, we will go the extra mile to ensure quality and reliability before our products ever reach the customer’s site. This image showcases one of our prebuilt rooms, fully assembled and tested in our shop prior to delivery. For clients who require added assurance, we offer the capability to construct and run complete units in-house—space permitting.",
-        snapshotKV: { "Service": "Prebuild Verification", "Benefit": "Peace of Mind", "Testing": "In-House Run-Up", "Delivery": "Ready-to-Install" },
-        images: ["Project_Pictures_Compressed/Thermo_Site_P.10.1.png"]
-      }
+      { id: 1, title: "San Diego, Container", year: 2023, isFeatured: true, industryTags: ["Biotech/Pharma"], projectTypeTags: ["Retrofit"], systemCategory: "Environmental Room", capabilityTags: ["Stability", "Conditioning", "Modular"], summary: "Thermolinear recently delivered a customized environmental solution for a client in San Diego by modifying a standard refrigerated shipping container to precisely control both temperature and humidity. This innovative adaptation enabled the customer to launch their stability study without the delays and costs associated with new construction and complex permitting processes.", snapshotKV: { "Location": "San Diego, CA", "Type": "Container Retrofit", "Key Benefit": "Speed & Cost Savings", "Feature": "Temp & Humidity Control" }, images: ["Project_Pictures_Compressed/Thermo_Site_P.1.1.png", "Project_Pictures_Compressed/Thermo_Site_P.1.2.png"] },
+      { id: 2, title: "Upgrading Legacy Systems: Modern Controls with Minimal Downtime", year: 2022, isFeatured: false, industryTags: ["Manufacturing"], projectTypeTags: ["Controls Upgrade"], systemCategory: "Controls", capabilityTags: ["Retrofit", "Modernization", "Efficiency"], summary: "Thermolinear recently completed a strategic control system upgrade, transforming an early 1980s-era control panel into a state-of-the-art system inside the original control enclosure. This modernization effort allowed our customer to significantly enhance the performance and reliability of their ovens without the need for full equipment replacement.", snapshotKV: { "Original Era": "Early 1980s", "Strategy": "Phased Upgrade", "Downtime": "Minimal", "Result": "State-of-the-Art System" }, images: ["Project_Pictures_Compressed/Thermo_Site_P.2.1.png", "Project_Pictures_Compressed/Thermo_Site_P.2.2.png"] },
+      { id: 3, title: "CWRU stainless front 4°C unit", year: 2021, isFeatured: true, industryTags: ["University/Research"], projectTypeTags: ["New Build"], systemCategory: "Environmental Room", capabilityTags: ["Biological Research", "Precision Cooling", "Durability"], summary: "Thermolinear consistently provides precision-controlled environments, consider the installation of this stainless steel front 4°C cooler in a leading biological research facility. Renowned for our ability to deliver high-quality, reliable solutions with efficiency, we specialize in temperature-controlled rooms that maintain a consistent 4°C ±2°C—critical for scientific accuracy.", snapshotKV: { "Institution Type": "Biological Research", "Temperature": "4°C ±2°C", "Material": "Stainless Steel Front", "Features": "Viewing Window" }, images: ["Project_Pictures_Compressed/Thermo_Site_P.3.1.png"] },
+      { id: 4, title: "Existing Basement", year: 2020, isFeatured: false, industryTags: ["University/Research"], projectTypeTags: ["New Build"], systemCategory: "Environmental Room", capabilityTags: ["Retrofit", "Precision Fit", "Constraints"], summary: "Thermolinear excels in designing and installing temperature-controlled rooms within tight building constraints, as demonstrated in this recent project within the basement of an older university facility. Faced with existing mechanical obstructions—such as the pipe in the foreground, which could not be relocated without significant cost—we meticulously took field measurements to ensure a precise fit.", snapshotKV: { "Environment": "Basement Retrofit", "Constraint": "Structural Obstructions", "Method": "Field Measurements", "Result": "Maximized Available Space" }, images: ["Project_Pictures_Compressed/Thermo_Site_P.4.1.png"] },
+      { id: 5, title: "Qure Med", year: 2023, isFeatured: false, industryTags: ["Healthcare"], projectTypeTags: ["New Build"], systemCategory: "Environmental Room", capabilityTags: ["Speed", "Efficiency", "Cost-Effective"], summary: "Thermolinear’s ability to deliver high-quality, efficient solutions is showcased in this 'white-box' temperature-controlled room. Rather than overcomplicating the project, we focused on speed and precision, ensuring a swift installation without unnecessary redesign. In less than a week, we successfully installed the room and refrigeration system.", snapshotKV: { "Client": "Qure Med", "Timeline": "< 1 Week", "Strategy": "Minimal Redesign", "Mounting": "Existing Roof Curb" }, images: ["Project_Pictures_Compressed/Thermo_Site_P.5.1.png", "Project_Pictures_Compressed/Thermo_Site_P.5.2.png"] },
+      { id: 6, title: "OUHCOM", year: 2022, isFeatured: false, industryTags: ["Healthcare"], projectTypeTags: ["New Build"], systemCategory: "Environmental Room", capabilityTags: ["Budget-Conscious", "Redundancy", "Large Scale"], summary: "Thermolinear remains committed to providing cost-effective yet highly reliable solutions, as demonstrated in this large morgue installation. Understanding the client’s budget constraints, we engineered a system that balances affordability with operational security. By incorporating multiple ceiling-hung evaporators and multiple outdoor condensers, we ensured the room maintains temperature even if one system is offline.", snapshotKV: { "Facility": "OUHCOM Morgue", "Evaporators": "Multiple Ceiling-Hung", "Redundancy": "Partial (Operational Security)", "Approach": "Budget Optimized" }, images: ["Project_Pictures_Compressed/Thermo_Site_P.6.1.png"] },
+      { id: 7, title: "Challenges", year: 2020, isFeatured: false, industryTags: ["Company"], projectTypeTags: ["Service"], systemCategory: "Service", capabilityTags: ["Dedication", "Safety", "On-Site Installation"], summary: "At Thermolinear, our commitment to excellence never wavered—even during the most challenging times of the COVID-19 pandemic. As shown in these photos, our dedicated technicians continued to deliver high-quality work while adapting to necessary health and safety protocols.", snapshotKV: { "Context": "COVID-19 Pandemic", "Commitment": "Unwavering", "Safety": "Adapted Protocols", "Team Culture": "Positive & Dedicated" }, images: ["Project_Pictures_Compressed/Thermo_Site_P.7.1.png", "Project_Pictures_Compressed/Thermo_Site_P.7.2.png"] },
+      { id: 8, title: "Pressure", year: 2021, isFeatured: true, industryTags: ["Manufacturing"], projectTypeTags: ["New Build"], systemCategory: "Environmental Room", capabilityTags: ["Pressure Control", "Cleanroom", "Compliance"], summary: "Thermolinear specializes in designing and building temperature-controlled rooms that meet precise pressure differential requirements, as exemplified by this Magnehelic pressure gauge. Many of our installations serve critical applications in medical and manufacturing environments where maintaining consistent pressure is just as essential as controlling temperature and humidity.", snapshotKV: { "Focus": "Pressure Differential", "Monitoring": "Magnehelic Gauge", "Applications": "Cleanroom / Containment", "Compliance": "Industry Specific" }, images: ["Project_Pictures_Compressed/Thermo_Site_P.8.1.png"] },
+      { id: 9, title: "Rapid Prototyping", year: 2023, isFeatured: true, industryTags: ["Manufacturing"], projectTypeTags: ["Prototyping"], systemCategory: "Conditioning", capabilityTags: ["Innovation", "Risk Reduction", "Speed"], summary: "At Thermolinear, we prioritize innovation and risk reduction in every custom solution we deliver. These photos showcase a proof-of-concept project alongside its final built solution—developed for a large manufacturer seeking a major design change. By leveraging materials we had on hand, we constructed and tested a functional mock-up within a month.", snapshotKV: { "Client": "Large Manufacturer", "Phase 1": "Proof of Concept", "Timeline": "1 Month Mockup", "Risk": "Minimized" }, images: ["Project_Pictures_Compressed/Thermo_Site_P.9.1.png", "Project_Pictures_Compressed/Thermo_Site_P.9.2.png", "Project_Pictures_Compressed/Thermo_Site_P.9.3.png"] },
+      { id: 10, title: "Prebuild Service", year: 2022, isFeatured: false, industryTags: ["Service"], projectTypeTags: ["Service"], systemCategory: "Service", capabilityTags: ["Quality Assurance", "Testing", "Reliability"], summary: "At Thermolinear, we will go the extra mile to ensure quality and reliability before our products ever reach the customer’s site. This image showcases one of our prebuilt rooms, fully assembled and tested in our shop prior to delivery. For clients who require added assurance, we offer the capability to construct and run complete units in-house—space permitting.", snapshotKV: { "Service": "Prebuild Verification", "Benefit": "Peace of Mind", "Testing": "In-House Run-Up", "Delivery": "Ready-to-Install" }, images: ["Project_Pictures_Compressed/Thermo_Site_P.10.1.png"] }
     ];
 
     const EMAIL_USER = 'JonBell';
@@ -796,6 +787,13 @@
     let modalBody = null;
     let modalTitle = null;
     let modalTags = null;
+    let modalMediaDeck = null;
+    let deckDots = null;
+
+    // Deck State
+    let currentDeckImages = [];
+    let currentSlide = 0;
+    let deckTouchStartX = 0;
 
     function init() {
       projectsGrid = document.getElementById('projectsGrid');
@@ -803,6 +801,8 @@
       modalBody = document.getElementById('modalBody');
       modalTitle = document.getElementById('modalTitle');
       modalTags = document.getElementById('modalTags');
+      modalMediaDeck = document.getElementById('modalMediaDeck');
+      deckDots = document.getElementById('deckDots');
 
       setupEmailLinks();
       initDynamicBackgrounds();
@@ -865,13 +865,98 @@
       });
     }
 
+    // --- Deck Logic ---
+    
+    function renderDeck(images) {
+      currentDeckImages = images;
+      currentSlide = 0;
+      
+      // Clear deck
+      modalMediaDeck.querySelectorAll('.deck-card, .deck-dot').forEach(el => el.remove());
+      
+      const isSingle = images.length === 1;
+      modalMediaDeck.classList.toggle('single-image', isSingle);
+      
+      // Create cards
+      images.forEach((src, index) => {
+        const card = document.createElement('div');
+        card.className = 'deck-card';
+        card.dataset.index = index;
+        card.innerHTML = `<img src="${src}" alt="Project image ${index + 1}">`;
+        modalMediaDeck.appendChild(card);
+        
+        // Add dot
+        if (!isSingle) {
+          const dot = document.createElement('button');
+          dot.className = 'deck-dot';
+          dot.dataset.index = index;
+          dot.addEventListener('click', () => goToSlide(index));
+          deckDots.appendChild(dot);
+        }
+      });
+      
+      updateDeckPositions();
+    }
+    
+    function updateDeckPositions() {
+      const cards = modalMediaDeck.querySelectorAll('.deck-card');
+      const dots = deckDots.querySelectorAll('.deck-dot');
+      
+      cards.forEach((card, i) => {
+        const position = i - currentSlide;
+        card.dataset.position = position;
+        card.classList.toggle('hidden', position < -1 || position > 2);
+      });
+      
+      dots.forEach((dot, i) => {
+        dot.classList.toggle('active', i === currentSlide);
+      });
+    }
+    
+    function nextSlide() {
+      if (currentSlide < currentDeckImages.length - 1) {
+        currentSlide++;
+        updateDeckPositions();
+      }
+    }
+    
+    function prevSlide() {
+      if (currentSlide > 0) {
+        currentSlide--;
+        updateDeckPositions();
+      }
+    }
+    
+    function goToSlide(index) {
+      currentSlide = index;
+      updateDeckPositions();
+    }
+    
+    // Touch/Swipe Handlers
+    function handleDeckTouchStart(e) {
+      deckTouchStartX = e.touches[0].clientX;
+    }
+    
+    function handleDeckTouchEnd(e) {
+      const touchEndX = e.changedTouches[0].clientX;
+      const diff = deckTouchStartX - touchEndX;
+      const threshold = 50;
+      
+      if (diff > threshold) nextSlide();
+      else if (diff < -threshold) prevSlide();
+    }
+
     function openModal(projectId) {
       const project = PROJECTS.find(p => p.id === projectId);
       if (!project || !modalOverlay) return;
+      
       if (modalTitle) modalTitle.textContent = project.title;
       if (modalTags) modalTags.innerHTML = [...project.industryTags, ...project.projectTypeTags, ...project.capabilityTags].map(tag => `<span class="project-tag">${tag}</span>`).join('');
       
       const email = getEmail();
+      
+      // Render Deck
+      renderDeck(project.images);
       
       if (modalBody) {
         modalBody.innerHTML = `
@@ -890,34 +975,43 @@
               `).join('')}
             </div>
           </div>
-          <div class="modal-section">
-            <h3 class="modal-section-title">Project Gallery</h3>
-            <div class="modal-gallery">
-              ${project.images.map(img => `
-                <div class="modal-gallery-item">
-                  <img src="${img}" alt="Project image" loading="lazy">
-                </div>
-              `).join('')}
-            </div>
-          </div>
           <div class="modal-cta">
             <a href="mailto:${email}?subject=Inquiry%20about%20similar%20project%3A%20${encodeURIComponent(project.title)}" class="btn btn-primary">Email about a similar project</a>
           </div>
         `;
       }
+      
       modalOverlay.classList.add('active');
       document.body.classList.add('modal-open');
       document.getElementById('modalClose').focus();
     }
 
-    function closeModal() { if (!modalOverlay) return; modalOverlay.classList.remove('active'); document.body.classList.remove('modal-open'); }
+    function closeModal() { 
+      if (!modalOverlay) return; 
+      modalOverlay.classList.remove('active'); 
+      document.body.classList.remove('modal-open'); 
+    }
 
     function setupEventListeners() {
       const modalClose = document.getElementById('modalClose'); 
       const modalBackdrop = document.getElementById('modalBackdrop'); 
       if (modalClose) modalClose.addEventListener('click', closeModal); 
       if (modalBackdrop) modalBackdrop.addEventListener('click', closeModal);
-      document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && modalOverlay && modalOverlay.classList.contains('active')) closeModal(); });
+      document.addEventListener('keydown', (e) => { 
+        if (e.key === 'Escape' && modalOverlay && modalOverlay.classList.contains('active')) closeModal(); 
+        if (modalOverlay.classList.contains('active')) {
+           if (e.key === 'ArrowRight') nextSlide();
+           if (e.key === 'ArrowLeft') prevSlide();
+        }
+      });
+      
+      // Deck Buttons
+      document.getElementById('deckNext').addEventListener('click', nextSlide);
+      document.getElementById('deckPrev').addEventListener('click', prevSlide);
+      
+      // Deck Touch
+      modalMediaDeck.addEventListener('touchstart', handleDeckTouchStart, { passive: true });
+      modalMediaDeck.addEventListener('touchend', handleDeckTouchEnd, { passive: true });
     }
 
     function setupScrollReveal() { const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('revealed'); }); }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' }); document.querySelectorAll('.reveal').forEach(el => observer.observe(el)); }
